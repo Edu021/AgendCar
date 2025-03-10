@@ -50,3 +50,5 @@ O **AgendCar** tem como objetivo resolver os problemas do domínio de forma efic
 - **Histórico de Agendamentos**: O sistema manterá um histórico dos agendamentos realizados, permitindo que os administradores e clientes consultem os serviços passados.
 - **Interface Responsiva**: A plataforma será totalmente responsiva, oferecendo uma experiência de usuário fluida em diferentes dispositivos, como desktops, tablets e smartphones.
 - **Autenticação**: Implementação de login para clientes e administradores, garantindo acesso seguro à plataforma.
+
+**Trello:** https://trello.com/invite/b/67ce29ca8d430398d2ca447d/ATTIcd885b2eeac35d720456c51b499a5d438C703F65/agendcar
