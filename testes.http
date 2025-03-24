@@ -1,1 +1,25 @@
+### listar todos agendamentos
+
 GET http://localhost:3000/api/appointments
+
+### buscar agendamento por ID
+
+GET http://localhost:3000/api/appointments/1
+
+### buscar agendamentos mais recente
+
+GET http://localhost:3000/api/appointments/upcoming
+
+### criar um agendamento
+
+POST http://localhost:3000/api/appointments
+Content-Type: application/json
+
+{
+  "appointment": {
+    "client_id": 1,
+    "service_id": 1,
+    "data_hora": "2025-04-01T10:00:00",
+    "status": "agendado"
+  }
+}
