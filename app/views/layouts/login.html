@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgendCar - Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(37, 35, 35, 1);
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+        }
+
+        .login-container {
+            background-color: rgba(51, 51, 51, 1);
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgb(0, 0, 0);
+            padding: 30px;
+            width: 350px;
+            text-align: center;
+            margin: 100px auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+            height: 50px;
+            background-color: #eee;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .login-button {
+            background-color: rgba(51, 51, 51, 1);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .login-button:hover {
+            background-color: rgba(6, 37, 53, 1);
+        }
+
+        .register-link {
+            display: block;
+            margin-top: 15px;
+            color: #555;
+            text-decoration: none;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <svg class="background-svg" viewBox="0 0 1920 795" height="870" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6FE8FD" />
+                <stop offset="50%" stop-color="#012232" />
+            </linearGradient>
+        </defs>
+        <path
+            d="M0,10 
+               C300,600 400,700 850,200
+               C1500,300 1200,500 1920,780 
+               L1920,795 
+               L0,1000 
+               Z"
+            fill="url(#gradient)"S
+        />
+    </svg>
+
+    <div class="login-container">
+        <div class="logo"> <img src="images/" alt=""></div>
+        <h1>AgendCar - login</h1>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Digite seu email">
+        </div>
+
+        <div class="input-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" placeholder="Digite sua senha">
+        </div>
+
+        <button class="login-button">Entrar</button>
+
+    </div>
+</body>
+</html>
