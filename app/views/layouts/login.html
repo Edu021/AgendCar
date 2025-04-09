@@ -7,7 +7,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: rgba(37, 35, 35, 1);
+            background: rgb(2,0,36);
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(11,11,11,1) 65%, rgba(0,212,255,1) 100%);
             margin: 0;
             padding: 0;
             position: relative;
@@ -23,7 +24,8 @@
         }
 
         .login-container {
-            background-color: rgba(51, 51, 51, 1);
+            background: rgb(3,3,3);
+            background: linear-gradient(264deg, rgba(3,3,3,1) 25%, rgba(32,32,34,1) 57%, rgba(59,64,65,1) 89%);
             border-radius: 10px;
             box-shadow: 0px 4px 12px rgb(0, 0, 0);
             padding: 30px;
@@ -41,7 +43,7 @@
         }
 
         h1 {
-            color: #333;
+            color: #186880;
             font-size: 24px;
             margin-bottom: 30px;
         }
@@ -99,16 +101,17 @@
     <svg class="background-svg" viewBox="0 0 1920 795" height="870" xmlns="http://www.w3.org/2000/svg">
         <defs>
             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#6FE8FD" />
-                <stop offset="50%" stop-color="#012232" />
+                <stop offset="15%" stop-color="#020024" />
+                <stop offset="65%" stop-color="#209be4" />
+                <stop offset="100%" stop-color="#00d4ff" />
             </linearGradient>
         </defs>
         <path
             d="M0,10 
-               C300,600 400,700 850,200
-               C1500,300 1200,500 1920,780 
+               C300,650 400,700 900,200
+               C1200,400 1200,1000 1920,200 
                L1920,795 
-               L0,1000 
+               L0,1200 
                Z"
             fill="url(#gradient)"S
         />
