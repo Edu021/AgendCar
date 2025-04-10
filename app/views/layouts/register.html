@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Register</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+    body{
+        font-family: "Open Sans", sans-serif;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #99a2a7 ;
+    }
+
+    .content {
+        background-color:#ffff;
+        border-radius: 15px;
+        width: 80%;
+        height: 50%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        text-align: center;
+    }
+
+    .content::before{
+        content:"";
+        position: absolute;
+        background: rgb(24,53,68);
+        background: linear-gradient(264deg, rgba(24,53,68,1) 25%, rgba(24,104,128,1) 57%, rgba(59,64,65,1) 110%);
+        width: 40%;
+        height: 100%;
+    }
+
+    .title {
+        font-size: 28px;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+
+    .title-welcome {
+        color: #ffff;
+    }
+
+    .title-create {
+        color: #0d404f;
+    }
+    
+    .description {
+        font-size: 14px;
+        font-weight: 300;
+        color: #ffff;
+        line-height: 30px;
+    }
+
+    .description-fazer-login {
+        color: #ffff;
+    }
+
+    .description-dados {
+        color: #0d404f;
+    }
+
+    .btn {
+        border-radius: 15px;
+        text-transform: uppercase;
+        color: #ffff;
+        font-size: 10px;
+        padding: 10px 50px;
+        font-weight: bold;
+        width: 150px;
+        align-self: center;
+        align-items: center;
+        border-width: 0px;
+    }
+
+    .btn-entrar {
+        background-color: transparent;
+        border: 1px solid #ffff;
+        cursor: pointer;
+    }
+
+    .btn-entrar:hover{
+        background-color: #0d404f;
+        color: #68aed2 ;
+    }
+
+    .btn-register {
+        background-color: #68aed2;
+        color: #0d404f;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-register:hover {
+        background-color: #0d404f;
+        color: #ffff;
+    }
+
+    .first-content {
+        display: flex;
+    }
+
+    .First-column {
+        text-align: center;
+        flex: 1 0 auto;
+        z-index: 1;
+    }
+
+    .Second-column {
+        flex: 2 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .form{
+        display: flex;
+        flex-direction: column;
+        width: 55%;
+    }
+
+    .form input {
+        height: 45px;
+        width: 100%;
+        border: none;
+        background-color: #ecf0f1;
+        margin: 8px;
+        
+    }
+
+    .label-input {
+        background-color: #ecf0f1;
+        display: flex;
+        align-items: center;
+        margin: 8px;
+    }
+
+    .icon-modify {
+        color: #0d404f;
+        padding: 0 5px;
+    }
+
+    .second-content{
+        position: absolute;
+        display: none;
+    }
+    </style>
+   
+</head>
+<body>
+    <!-- <svg class="background-svg" viewBox="0 0 1920 795" height="870" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="15%" stop-color="#020024" />
+                <stop offset="65%" stop-color="#209be4" />
+                <stop offset="100%" stop-color="#00d4ff" />
+            </linearGradient>
+        </defs>
+        <path
+            d="M0,10 
+               C300,650 400,700 900,200
+               C1200,400 1200,1000 1920,200 
+               L1920,795 
+               L0,1200 
+               Z"
+            fill="url(#gradient)"S
+        />
+    </svg>
+    
+    <div class="login-container">
+        <div class="logo"> <img src="images/" alt=""></div>
+        <h1>Registre-se</h1>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Digite seu email">
+        </div>
+
+        <div class="input-group">
+            <label for="Numero de Telefone">Numero de telefone</label>
+            <input type="Num telefone" id="Num telefone" placeholder="Digite seu telefone">
+        </div>
+
+        <div class="input-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" placeholder="Digite sua senha">
+        </div>
+        <div class="input-group">
+            <label for="password">Confirme sua senha</label>
+            <input type="password" id="password" placeholder="Digite sua senha">
+        </div>
+
+        <button class="Register-button">Registrar</button>
+    </div>
+
+    <script>
+        document.querySelector('.Register-button').addEventListener('click', function() {
+            window.location.href = 'login.html';
+        });
+    </script>
+    -->
+    <div class="container">
+        <div class="content first-content"> <!--Fist content-->
+            <div class="First-column"> 
+                <h2 class="title title-welcome">Bem-vindo a AgendCar!</h2>
+                <p class="description description-fazer-login">Ja possui conta? Faça seu login</p>
+                <button class="btn btn-entrar">Entrar</button>
+            </div>
+            <div class="Second-column">
+                <H2 class="title title-create">Crie Sua conta</H2>
+                <p class="description description-dados">Insira os seus dados abaixo</p>
+                <form class="form">
+                    <label class="label-input" for="">
+                        <i class="fa-solid fa-user icon-modify"></i>
+                        <input type="text" placeholder="Nome">
+                    </label>
+                    <label class="label-input" for="">
+                        <i class="fa-solid fa-envelope icon-modify"></i>
+                        <input type="Email" placeholder="Digite seu email">
+                    </label>
+                    <label class="label-input" for="">
+                        <i class="fa-solid fa-lock icon-modify"></i>
+                        <input type="Senha" placeholder="Digite sua senha">
+                    </label>
+                    <button class="btn btn-register">Registrar</button>
+                </form>
+            </div>
+
+        </div>
+        <div class="content second-content"> <!--Second content-->
+
+            <div class="First-column"> 
+                <h2 class="title title-hello">Ola, amigo!</h2>
+                <p class="description">Não possui conta? Faça seu registro</p>
+                <button class="btn btn-registrar">Registrar</button>
+            </div>
+
+            <div class="Second-column">
+                <H2 class="title title-login">Faça seu login</H2>
+                <p class="description">Insira os seus dados abaixo</p>
+                <form class="form">
+                    <input type="Email" placeholder="Digite seu email">
+                    <input type="Senha" placeholder="Digite sua senha">
+                    <button class="btn btn-enter">Entrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

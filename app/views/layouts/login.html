@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgendCar - Login</title>
+    <title>login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -113,7 +113,7 @@
                L1920,795 
                L0,1200 
                Z"
-            fill="url(#gradient)"S
+            fill="url(#gradient)"
         />
     </svg>
 
@@ -132,7 +132,12 @@
         </div>
 
         <button class="login-button">Entrar</button>
-
     </div>
+
+    <script>
+        document.querySelector('.login-button').addEventListener('click', function() {
+            window.location.href = 'register.html';
+        });
+    </script>
 </body>
 </html>
