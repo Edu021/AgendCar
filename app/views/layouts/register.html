@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,13 +23,14 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: #99a2a7 ;
+        background: rgb(0,0,0);
+        background: linear-gradient(264deg, rgba(0,0,0,1) 0%, rgba(13,64,79,0.7371323529411764) 74%, rgba(187,194,195,1) 100%);
     }
 
     .content {
         background-color:#ffff;
         border-radius: 15px;
-        width: 80%;
+        width: 960px;
         height: 50%;
         display: flex;
         justify-content: space-between;
@@ -41,10 +42,13 @@
     .content::before{
         content:"";
         position: absolute;
-        background: rgb(24,53,68);
-        background: linear-gradient(264deg, rgba(24,53,68,1) 25%, rgba(24,104,128,1) 57%, rgba(59,64,65,1) 110%);
+        background-color:#0d404f;
         width: 40%;
         height: 100%;
+        border-top-left-radius: 15px ;
+        border-bottom-left-radius: 15px;
+
+        left: 0;
     }
 
     .title {
@@ -53,11 +57,11 @@
         text-transform: capitalize;
     }
 
-    .title-welcome {
+    .title-primary {
         color: #ffff;
     }
 
-    .title-create {
+    .title-second {
         color: #0d404f;
     }
     
@@ -68,11 +72,11 @@
         line-height: 30px;
     }
 
-    .description-fazer-login {
+    .description-primary {
         color: #ffff;
     }
 
-    .description-dados {
+    .description-second{
         color: #0d404f;
     }
 
@@ -89,25 +93,26 @@
         border-width: 0px;
     }
 
-    .btn-entrar {
+    .btn-primary {
         background-color: transparent;
         border: 1px solid #ffff;
         cursor: pointer;
+        transition: background-color 1s ;
     }
 
-    .btn-entrar:hover{
-        background-color: #0d404f;
-        color: #68aed2 ;
+    .btn-primary:hover{
+        background-color: #ffff;
+        color:#0d404f ;
     }
 
-    .btn-register {
+    .btn-second {
         background-color: #68aed2;
         color: #0d404f;
         cursor: pointer;
-        font-weight: bold;
+        transition: background-color 1s ;
     }
 
-    .btn-register:hover {
+    .btn-second:hover {
         background-color: #0d404f;
         color: #ffff;
     }
@@ -116,14 +121,18 @@
         display: flex;
     }
 
+    .first-content .Second-column{
+        z-index: 2;
+    }
+
     .First-column {
         text-align: center;
-        flex: 1 0 auto;
+        width: 40%;
         z-index: 1;
     }
 
     .Second-column {
-        flex: 2 0 auto;
+        width: 60%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -143,6 +152,12 @@
         
     }
 
+    input:-webkit-autofill 
+{    
+    -webkit-box-shadow: 0 0 0px 1000px #ecf0f1 inset !important;
+    -webkit-text-fill-color: #000 !important;
+}
+
     .label-input {
         background-color: #ecf0f1;
         display: flex;
@@ -157,73 +172,165 @@
 
     .second-content{
         position: absolute;
-        display: none;
     }
+
+    .second-content .First-column {
+        order: 2;
+        z-index: -1;
+    }
+    .second-content .Second-column {
+        order: 1;
+        z-index: -1;
+    }
+
+    .sign-in-js .first-content .First-column {
+        z-index: -1;
+    }
+
+    .sign-in-js .second-content .First-column,
+    .sign-in-js .second-content .Second-column {
+        z-index: 11;
+    }
+
+    .sign-in-js .second-content .First-column {
+        z-index: 13;
+    }
+
+    .sign-in-js .content::before{
+        left: 60%;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 15px ;
+        border-bottom-right-radius: 15px;
+        animation: slidein 1.85s;
+
+        z-index: 12;
+    }
+
+    .sign-up-js .content::before {
+        animation: slideout 1.85s;
+
+        z-index: 12;
+    }
+
+    .sign-up-js .second-content .First-column,
+    .sign-up-js .second-content .Second-column {
+        z-index: -1;
+    }
+    
+    .sign-up-js .first-content .Second-column {
+        z-index: 11;
+    }
+    .sign-up-js .first-content .First-column {
+        z-index: 13;
+    }
+
+    .sign-in-js .first-content .Second-column{
+
+        z-index: -1;
+        position: relative;
+        animation: desloc-left 2s;
+    }
+
+    .sign-up-js .second-content .Second-column {
+        position: relative;
+        z-index: -1;
+        animation: desloc-right 2s;
+    }
+ 
+    /*Animação CSS para o conteudo */
+
+    @keyframes desloc-left {
+        from {
+            left: 0%;
+            opacity: 1;
+            z-index: 12;
+        }
+
+        25% {
+            left: -80px;
+            opacity: .5;
+            z-index: 12;
+        }
+
+        50% {
+            left: -100px;
+            opacity: .2;
+            z-index: 12;
+        }
+        to {
+            left: -110px;
+            opacity: 0;
+            z-index: -1;
+        }
+    }
+
+    @keyframes desloc-right {
+        from {
+            left: 0;
+            z-index: 12;
+            opacity: 1;
+        }
+
+        25%{    
+            left: 80px;
+            opacity: .5;
+        }
+
+        50% {
+            left: 100px;
+            opacity: .2;
+        }
+
+        to {
+            left: 110px;
+            z-index: -1;
+            opacity: 0;
+        }
+    }
+
+    /*Animação CSS*/
+
+    @keyframes slidein {
+        from{
+            left: 0;
+            width: 40%;
+        }
+
+        to {
+            left: 60%;
+            width: 40%;
+        }
+    }
+ 
+
+    @keyframes slideout {
+        from{
+            left: 60%;
+            width: 40%;
+        }
+
+        to {
+            left: 0;
+            width: 40%;
+        }
+    }
+
+
     </style>
    
 </head>
 <body>
-    <!-- <svg class="background-svg" viewBox="0 0 1920 795" height="870" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="15%" stop-color="#020024" />
-                <stop offset="65%" stop-color="#209be4" />
-                <stop offset="100%" stop-color="#00d4ff" />
-            </linearGradient>
-        </defs>
-        <path
-            d="M0,10 
-               C300,650 400,700 900,200
-               C1200,400 1200,1000 1920,200 
-               L1920,795 
-               L0,1200 
-               Z"
-            fill="url(#gradient)"S
-        />
-    </svg>
-    
-    <div class="login-container">
-        <div class="logo"> <img src="images/" alt=""></div>
-        <h1>Registre-se</h1>
-
-        <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Digite seu email">
-        </div>
-
-        <div class="input-group">
-            <label for="Numero de Telefone">Numero de telefone</label>
-            <input type="Num telefone" id="Num telefone" placeholder="Digite seu telefone">
-        </div>
-
-        <div class="input-group">
-            <label for="password">Senha</label>
-            <input type="password" id="password" placeholder="Digite sua senha">
-        </div>
-        <div class="input-group">
-            <label for="password">Confirme sua senha</label>
-            <input type="password" id="password" placeholder="Digite sua senha">
-        </div>
-
-        <button class="Register-button">Registrar</button>
-    </div>
-
-    <script>
-        document.querySelector('.Register-button').addEventListener('click', function() {
-            window.location.href = 'login.html';
-        });
-    </script>
-    -->
     <div class="container">
         <div class="content first-content"> <!--Fist content-->
             <div class="First-column"> 
-                <h2 class="title title-welcome">Bem-vindo a AgendCar!</h2>
-                <p class="description description-fazer-login">Ja possui conta? Faça seu login</p>
-                <button class="btn btn-entrar">Entrar</button>
+                <h2 class="title title-primary">Bem-vindo a AgendCar!</h2>
+                <p class="description description-primary">Ja possui conta? Faça seu login</p>
+                <button id="signin" class="btn btn-primary">Entrar</button>
             </div>
             <div class="Second-column">
-                <H2 class="title title-create">Crie Sua conta</H2>
-                <p class="description description-dados">Insira os seus dados abaixo</p>
+                <H2 class="title title-second">Crie Sua conta</H2>
+                <p class="description description-second">Insira os seus dados abaixo</p>
                 <form class="form">
                     <label class="label-input" for="">
                         <i class="fa-solid fa-user icon-modify"></i>
@@ -237,7 +344,7 @@
                         <i class="fa-solid fa-lock icon-modify"></i>
                         <input type="Senha" placeholder="Digite sua senha">
                     </label>
-                    <button class="btn btn-register">Registrar</button>
+                    <button class="btn btn-second">Registrar</button>
                 </form>
             </div>
 
@@ -245,21 +352,47 @@
         <div class="content second-content"> <!--Second content-->
 
             <div class="First-column"> 
-                <h2 class="title title-hello">Ola, amigo!</h2>
-                <p class="description">Não possui conta? Faça seu registro</p>
-                <button class="btn btn-registrar">Registrar</button>
+                <h2 class="title title-primary">Ola, amigo!</h2>
+                <p class="description description-primary">Não possui conta? Faça seu registro</p>
+                <button id="signup" class="btn btn-primary">Registrar</button>
             </div>
-
             <div class="Second-column">
-                <H2 class="title title-login">Faça seu login</H2>
-                <p class="description">Insira os seus dados abaixo</p>
+                <H2 class="title title-second">Faça seu login</H2>
+                <p class="description description-second">Insira os seus dados abaixo</p>
                 <form class="form">
-                    <input type="Email" placeholder="Digite seu email">
-                    <input type="Senha" placeholder="Digite sua senha">
-                    <button class="btn btn-enter">Entrar</button>
+                    <label class="label-input" for="">
+                        <i class="fa-solid fa-envelope icon-modify"></i>
+                        <input type="Email" placeholder="Digite seu email">
+                    </label>
+                    <label class="label-input" for="">
+                        <i class="fa-solid fa-lock icon-modify"></i>
+                        <input type="Senha" placeholder="Digite sua senha">
+                    </label>
+                    <button id="enter-btn" class="btn btn-second">Entrar</button>
                 </form>
             </div>
         </div>
     </div>
+    <script>
+        var btnsignin = document.querySelector("#signin");
+        var btnsignup = document.querySelector("#signup");
+        var body = document.querySelector("body");
+    
+        btnsignin.addEventListener("click", function () {
+            body.className = "sign-in-js";
+        });
+    
+        btnsignup.addEventListener("click", function () {
+            body.className = "sign-up-js"
+        });
+    
+        var enterBtn = document.querySelector("#enter-btn");
+        enterBtn.addEventListener("click", function(event) {
+            event.preventDefault(); // Evita recarregar a página
+            console.log("Botão Entrar clicado — login simulado.");
+            // Redireciona para car.html
+            window.location.href = "car.html";
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços de Estética Automotiva</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #012733, #2d2d2d);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+ 
+/* Navegação */
+.nav-bar {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    width: 100%;
+    height: 70px;
+    z-index: 1000;
+    padding: 1rem 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #0d404f;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #0d404f;
+    color: white;
+    padding: 2rem;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1100;
+}
+
+.sidebar.visible {
+    transform: translateX(0%);
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.profile-content h2 {
+    margin-bottom: 1rem;
+}
+
+.profile-content p {
+    margin-bottom: 0.75rem;
+        
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.profile-content h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.profile-content p {
+    margin-bottom: 0.75rem;
+}
+
+.hidden {
+    display: none;
+}
+
+
+.hero {
+    height: 400px;
+    background-image: url('https://images.unsplash.com/photo-1600706432502-77a0e2e32795?auto=format&fit=crop&q=80');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgb(0,0,0);
+    background: linear-gradient(264deg, rgba(0,0,0,1) 0%, rgba(13,64,79,0.7371323529411764) 74%, rgba(187,194,195,1) 100%);
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    color: white;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.hero .subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.icon-star, .icon-timer {
+    color: #fbbf24;
+}
+
+/* Services Section */
+.services {
+    padding: 4rem 0;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.service-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px #0d404f;
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+    transform: scale(1.05);
+}
+
+.service-icon {
+    color: #0d404f;
+    margin-bottom: 1rem;
+}
+
+.service-card h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.service-card p {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #0d404f !important;
+    margin: 1rem 0;
+}
+
+/* CTA Section */
+.cta {
+    background: rgb(0,0,0);
+    background: linear-gradient(264deg, rgba(0,0,0,1) 0%, rgba(13,64,79,0.7371323529411764) 74%, rgba(187,194,195,1) 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.cta h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.cta p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    background-color: transparent;
+    color:#0d404f;
+    border: 1px solid #0d404f;
+}
+
+.btn:hover {
+    background-color: #0d404f;
+    color: #fff;
+}
+
+.btn-white {
+    background-color: transparent;
+    color: #fff;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    border: 1px solid #fff;
+}
+
+.btn-white:hover {
+    background-color: #f8f9fa;
+    color: #0d404f;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta h2 {
+        font-size: 1.75rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="service.html" class="nav-logo">AgendCar</a>
+                <div class="nav-links">
+                    <a href="service.html" class="nav-link">Início</a>
+                    <a href="car.html" class="nav-link">Cadastrar Veículo</a>
+                    <a class="nav-link" id="profileLink" href="#">Perfil</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+       <!-- Sidebar de Perfil -->
+       <div id="sidebar" class="sidebar">
+        <button id="closeSidebar" class="close-btn">&times;</button>
+        <div class="profile-content">
+            <h2>Meu Perfil</h2>
+            <p><strong>Nome:</strong> João da Silva</p>
+            <p><strong>Email:</strong> joao@email.com</p>
+            <p><strong>Telefone:</strong> (11) 99999-9999</p>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-overlay">
+            <div class="container">
+                <div class="hero-content">
+
+                    <h1>Serviços de Estética Automotiva</h1>
+                    <p class="subtitle">Cuidamos do seu veículo com excelência e profissionalismo</p>
+                    <div class="feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-star">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        <span>Mais de 1000 clientes satisfeitos</span>
+                    </div>
+                    <div class="feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-timer">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>Atendimento rápido e profissional</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="services container">
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.4 16 9 16 9s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7h-2.3c-.7 0-1.4.3-1.9.8L6 8.5V13h0c0 1.1.9 2 2 2h1.5"></path>
+                        <path d="M9 17h1"></path>
+                        <path d="M17 17h1"></path>
+                        <path d="M5 11h3"></path>
+                        <circle cx="7.5" cy="17.5" r="2.5"></circle>
+                        <circle cx="16.5" cy="17.5" r="2.5"></circle>
+                    </svg>
+                </div>
+                <h3>Lavagem Completa</h3>
+                <p>Limpeza completa interna e externa do seu veículo com produtos premium.</p>
+                <p class="price">R$ 150,00</p>
+                <button class="btn">Agendar</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20a8 8 0 0 0 8-8"></path>
+                        <path d="M12 12v8"></path>
+                        <path d="M12 12a8 8 0 0 1-8-8"></path>
+                        <path d="M12 4v8"></path>
+                        <path d="m9 12 3-3 3 3"></path>
+                    </svg>
+                </div>
+                <h3>Polimento</h3>
+                <p>Polimento profissional para remover riscos e restaurar o brilho da pintura.</p>
+                <p class="price">R$ 280,00</p>
+                <button class="btn">Agendar</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                    </svg>
+                </div>
+                <h3>Cristalização</h3>
+                <p>Proteção duradoura que mantém seu carro brilhando por mais tempo.</p>
+                <p class="price">R$ 400,00</p>
+                <button class="btn">Agendar</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                </div>
+                <h3>Higienização</h3>
+                <p>Limpeza profunda de estofados e ar condicionado.</p>
+                <p class="price">R$ 200,00</p>
+                <button class="btn">Agendar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta">
+        <div class="container">
+            <h2>Agende seu horário hoje mesmo!</h2>
+            <p>Oferecemos os melhores serviços de estética automotiva da região</p>
+            <button class="btn btn-white">Contate-nos</button>
+        </div>
+    </div>
+
+    <script>
+            // Adiciona animação suave ao scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Adiciona efeito de hover nos cards de serviço
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'scale(1.05)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+
+        // Adiciona funcionalidade aos botões de agendamento
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', () => {
+                alert('Sistema de agendamento em desenvolvimento. Por favor, entre em contato por telefone.');
+            });
+        });
+
+                // Mostra e esconde a sidebar de perfil
+        const profileLink = document.getElementById('profileLink');
+        const sidebar = document.getElementById('sidebar');
+        const closeSidebar = document.getElementById('closeSidebar');
+
+        profileLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            sidebar.classList.add('visible');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('visible');
+        });
+    </script>
+</body>
+</html>
