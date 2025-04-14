@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <title>Register</title>
+    <title>Registrar</title>
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
@@ -331,21 +331,21 @@
             <div class="Second-column">
                 <H2 class="title title-second">Crie Sua conta</H2>
                 <p class="description description-second">Insira os seus dados abaixo</p>
-                <form class="form">
-                    <label class="label-input" for="">
-                        <i class="fa-solid fa-user icon-modify"></i>
-                        <input type="text" placeholder="Nome">
-                    </label>
-                    <label class="label-input" for="">
-                        <i class="fa-solid fa-envelope icon-modify"></i>
-                        <input type="Email" placeholder="Digite seu email">
-                    </label>
-                    <label class="label-input" for="">
-                        <i class="fa-solid fa-lock icon-modify"></i>
-                        <input type="Senha" placeholder="Digite sua senha">
-                    </label>
-                    <button class="btn btn-second">Registrar</button>
-                </form>
+<form id="registerForm" class="form">
+    <label class="label-input" for="nome">
+        <i class="fa-solid fa-user icon-modify"></i>
+        <input type="text" id="nome" placeholder="Nome" required>
+    </label>
+    <label class="label-input" for="email">
+        <i class="fa-solid fa-envelope icon-modify"></i>
+        <input type="email" id="email" placeholder="Digite seu email" required>
+    </label>
+    <label class="label-input" for="senha">
+        <i class="fa-solid fa-lock icon-modify"></i>
+        <input type="password" id="senha" placeholder="Digite sua senha" required>
+    </label>
+    <button type="submit" class="btn btn-second">Registrar</button>
+</form>
             </div>
 
         </div>
@@ -366,7 +366,7 @@
                     </label>
                     <label class="label-input" for="">
                         <i class="fa-solid fa-lock icon-modify"></i>
-                        <input type="Senha" placeholder="Digite sua senha">
+                        <input type="Senha"  placeholder="Digite sua senha">
                     </label>
                     <button id="enter-btn" class="btn btn-second">Entrar</button>
                 </form>
@@ -394,5 +394,35 @@
             window.location.href = "car.html";
         });
     </script>
+
+    <script>
+document.getElementById('registerForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const nome = document.getElementById('nome').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('senha').value;
+
+    fetch('/api/clients', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            client: { nome, email, password }
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'ok') {
+            alert('Registro realizado com sucesso!');
+            // Aqui você pode armazenar o token no localStorage ou cookies
+            localStorage.setItem('auth_token', data.token);
+        } else {
+            alert('Erro: ' + data.erros.join(', '));
+        }
+    });
+});
+</script>
 </body>
 </html>

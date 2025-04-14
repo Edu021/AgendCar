@@ -111,7 +111,6 @@
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
-        /* New styles for the redirect button */
         .redirect-button {
             font-family: sans-serif;
             justify-content: center;
@@ -142,7 +141,6 @@
             border-top: 1px solid #eee;
         }
 
-/* Validação de formulário */
 input:invalid {
     border-color: #0d404f;
 }
@@ -151,7 +149,6 @@ input:invalid:focus {
     box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
 }
 
-/* Responsividade */
 @media (max-width: 640px) {
     .register-card {
         margin: 1rem;
@@ -262,6 +259,7 @@ input:invalid:focus {
     </div>
 
     <script>
+    
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('carForm');
             const placaInput = document.getElementById('placa');
@@ -274,7 +272,34 @@ input:invalid:focus {
             if (!placaAntiga.test(value) && !placaMercosul.test(value)) {
             alert('Placa inválida! Use o formato ABC1234 (Modelo Antigo) ou ABC1D23 (Mercosul).');
             }
-        });
+    
+    document.getElementById("carForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    data.dono_id = 1;
+
+    const response = await fetch("/carros", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    const res = await response.json();
+
+    if (res.status === "ok") {
+        alert("Veículo cadastrado com sucesso!");
+        this.reset();
+    } else {
+        alert("Erro: " + res.erros.join(", "));
+    }
+});
+
+            });
 
             // Formata a placa enquanto o usuário digita
             //placaInput.addEventListener('input', (e) => {

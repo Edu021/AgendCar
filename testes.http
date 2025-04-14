@@ -4,7 +4,7 @@ GET http://localhost:3000/api/appointments
 
 ### buscar agendamento por ID
 
-GET http://localhost:3000/api/appointments/1
+GET http://localhost:3000/api/appointments/7
 
 ### buscar agendamentos mais recente
 
@@ -19,7 +19,52 @@ Content-Type: application/json
   "appointment": {
     "client_id": 1,
     "service_id": 1,
-    "data_hora": "2025-04-01T10:00:00",
-    "status": "agendado"
+    "data_hora": "2024-03-14T10:50:00",
+    "status": "finalizado"
+  }
+}
+
+
+### Listar todos carros
+
+GET http://localhost:3000/api/carros
+
+### Registrar cliente
+
+POST http://localhost:3000/api/register
+Content-Type: application/json
+
+{
+  "client": {
+    "nome": "João",
+    "email": "edu@example.com",
+    "password": "123456",
+    "telefone": "123456789"
+  }
+}
+
+### Login do client
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+  "email": "eduardo@gmail.com",
+  "password": "senha"
+}
+
+
+### Listar todos os clients
+GET http://localhost:3000/api/clients
+Content-Type: application/json
+
+### Criar um client
+POST http://localhost:3000/api/clients
+Content-Type: application/json
+
+{
+  "client": {
+    "nome": "eduardo",
+    "email": "eduardo@gmail.com",
+    "password": "senha"
   }
 }

@@ -7,7 +7,7 @@ module Api
       render json: @appointments.map { |a| 
         {
           id: a.id,
-          cliente: a.client.nome,
+          cliente: a.client.nome, 
           servico: a.service.nome_servico,
           data_hora: a.data_hora,
           status: a.status

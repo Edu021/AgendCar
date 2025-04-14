@@ -4,7 +4,7 @@ class CreateClients < ActiveRecord::Migration[7.1]
       t.string :nome
       t.string :telefone
       t.string :email, null: false, default: ""
-      t.string :password_digest
+      t.string :password_digest # mudado para password_digest
 
       t.timestamps
     end
