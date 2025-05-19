@@ -14,7 +14,6 @@ class Api::SessionsController < ApplicationController
   
     private
   
-    # Gerar token de autenticação
     def generate_token(client)
       JWT.encode({ client_id: client.id, exp: 24.hours.from_now.to_i }, Rails.application.secret_key_base)
     end

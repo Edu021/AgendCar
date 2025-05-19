@@ -121,19 +121,50 @@
     <div class="login-container">
         <div class="logo"> <img src="images/" alt=""></div>
         <h1>AgendCar - login</h1>
+        <form id="loginForm" class="form">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Digite seu email">
+            </div>
 
-        <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Digite seu email">
-        </div>
-
-        <div class="input-group">
-            <label for="password">Senha</label>
-            <input type="password" id="password" placeholder="Digite sua senha">
-        </div>
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha">
+            </div>
+        </form>
 
         <button class="login-button">Entrar</button>
 
     </div>
+    
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                client: { email, password }
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                localStorage.setItem('auth_token', data.token);
+                window.location.href = "/service";
+            } else {
+                alert('Erro: ' + data.errors.join(', '));
+            }
+        });
+    });
+</script>
+
+
 </body>
 </html>

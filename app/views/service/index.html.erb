@@ -665,6 +665,29 @@ body {
 
     <script>
         // Mock data for vehicles (in a real application, this would come from a database)
+        const userData = ['userName', 'email', 'telefone'];
+
+        fetch('/api/clients', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                client: { email, password }
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                localStorage.setItem('auth_token', data.token);
+                window.location.href = "/service";
+            } else {
+                alert('Erro: ' + data.errors.join(', '));
+            }
+        });
+
+        document
+
         const userVehicles = [
             {
                 placa: 'ABC1D23',
@@ -751,6 +774,10 @@ body {
 
         // Sidebar functionality
         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('userName').textContent = userData[0];
+            document.getElementById('userEmail').textContent = userData[1];
+            document.getElementById('userPhone').textContent = userData[2];
+
             const profileLink = document.getElementById('profileLink');
             const sidebar = document.getElementById('sidebar');
             const closeSidebar = document.getElementById('closeSidebar');

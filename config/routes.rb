@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :appointments, only: [:index, :create, :show] do
       collection do
-        get 'upcoming', to: 'appointments#upcoming'
+        get 'upcominregisterg', to: 'appointments#upcoming'
       end
     end
     resources :carros, only: [:index, :show, :create]

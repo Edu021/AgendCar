@@ -7,6 +7,10 @@ class Api::ClientsController < ApplicationController
         render json: clients
     end
     
+    def getByEmail
+      clients = Client.email(client_params)
+    end
+
     def create
       @client = Client.new(client_params)
   

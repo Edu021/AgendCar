@@ -359,17 +359,18 @@
             <div class="Second-column">
                 <H2 class="title title-second">Faça seu login</H2>
                 <p class="description description-second">Insira os seus dados abaixo</p>
-                <form class="form">
-                    <label class="label-input" for="">
+                <form id="loginForm" class="form">
+                    <label class="label-input">
                         <i class="fa-solid fa-envelope icon-modify"></i>
-                        <input type="Email" placeholder="Digite seu email">
+                        <input type="email" id="loginEmail" placeholder="Digite seu email" required>
                     </label>
-                    <label class="label-input" for="">
+                    <label class="label-input">
                         <i class="fa-solid fa-lock icon-modify"></i>
-                        <input type="Senha"  placeholder="Digite sua senha">
+                        <input type="password" id="loginSenha" placeholder="Digite sua senha" required>
                     </label>
-                    <button id="enter-btn" class="btn btn-second">Entrar</button>
+                    <button type="submit" class="btn btn-second">Entrar</button>
                 </form>
+
             </div>
         </div>
     </div>
@@ -385,14 +386,30 @@
         btnsignup.addEventListener("click", function () {
             body.className = "sign-up-js"
         });
-    
-        var enterBtn = document.querySelector("#enter-btn");
-        enterBtn.addEventListener("click", function(event) {
-            event.preventDefault(); // Evita recarregar a página
-            console.log("Botão Entrar clicado — login simulado.");
-            // Redireciona para car.html
-            window.location.href = "car.html";
+   
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginSenha').value;
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    localStorage.setItem('auth_token', data.token);
+                    window.location.href = '/service';
+                } else {
+                    alert('Erro no login: ' + (data.errors || ['Credenciais inválidas']).join(', '));
+                }
+            })
+            .catch(() => alert('Erro na requisição'));
         });
+
     </script>
 
     <script>
@@ -415,13 +432,13 @@ document.getElementById('registerForm').addEventListener('submit', function (e) 
     .then(response => response.json())
     .then(data => {
         if (data.status === 'ok') {
-            alert('Registro realizado com sucesso!');
-            // Aqui você pode armazenar o token no localStorage ou cookies
             localStorage.setItem('auth_token', data.token);
+            window.location.href = "/service";
         } else {
-            alert('Erro: ' + data.erros.join(', '));
+            alert('Erro: ' + data.errors.join(', '));
         }
     });
+    
 });
 </script>
 </body>
