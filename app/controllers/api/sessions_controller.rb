@@ -5,6 +5,7 @@ class Api::SessionsController < ApplicationController
       client = Client.find_by(email: params[:email])
   
       if client&.authenticate(params[:password])
+        session[:user_id] = client.id
         token = generate_token(client)
         render json: { status: "ok", client: client, token: token }
       else

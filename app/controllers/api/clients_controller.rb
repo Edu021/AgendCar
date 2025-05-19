@@ -15,6 +15,7 @@ class Api::ClientsController < ApplicationController
       @client = Client.new(client_params)
   
       if @client.save
+        session[:user_id] = @client.id
         render json: { status: 'ok', client: @client, token: @client.generate_auth_token }, status: :created
       else
         render json: { status: 'error', errors: @client.errors.full_messages }, status: :unprocessable_entity
@@ -24,7 +25,7 @@ class Api::ClientsController < ApplicationController
     private
   
     def client_params
-        params.require(:client).permit(:nome, :email, :telefone, :password)
+        params.require(:client).permit(:nome, :email, :telefone, :password, :password_confirmation)
     end      
   end
   
