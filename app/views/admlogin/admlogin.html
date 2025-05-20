@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Login Administrador</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            font-family: "Open Sans", sans-serif;
+        }
+
+        .spinner-overlay {
+            display: none; /* Inicialmente escondido */
+            position: fixed; /* Fica fixo na tela */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Fundo mais escuro e mais opaco */
+            z-index: 1000; /* Garante que fique acima de outros elementos */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            position: relative;
+            width: 20px; /* Aumentei um pouco o tamanho para melhor visualização da velocidade */
+            height: 20px;
+        }
+
+        .spinner div {
+            width: 100%;
+            height: 100%;
+            background-color: #00d9ff;
+            border-radius: 50%;
+            animation: spinner 0.75s infinite backwards; /* Reduzi a duração da animação */
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg) translateY(-200%);
+            }
+
+            60%,
+            100% {
+                transform: rotate(360deg) translateY(-200%);
+            }
+        }
+
+        .spinner div:nth-child(1) {
+            animation-delay: 0.05s; /* Reduzi o delay */
+        }
+
+        .spinner div:nth-child(2) {
+            animation-delay: 0.15s; /* Reduzi o delay */
+        }
+
+        .spinner div:nth-child(3) {
+            animation-delay: 0.25s; /* Reduzi o delay */
+        }
+
+        .spinner div:nth-child(4) {
+            animation-delay: 0.35s; /* Reduzi o delay */
+        }
+
+        .spinner div:nth-child(5) {
+            animation-delay: 0.45s; /* Reduzi o delay */
+        }
+        
+        .spinner-overlay.fade-out {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out; /* Adiciona uma transição suave de opacidade */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: rgb(0,0,0);
+            background: linear-gradient(264deg, rgba(0,0,0,1) 0%, rgba(13,64,79,0.7371323529411764) 74%, rgba(187,194,195,1) 100%);
+        }
+
+        .content {
+            background-color:#ffff;
+            border-radius: 15px;
+            width: 550px; /* Ajustei a largura para um formulário único */
+            height: 40%; /* Ajustei a altura */
+            display: flex;
+            flex-direction: column; /* Alinhar os itens verticalmente */
+            justify-content: center; /* Centralizar verticalmente */
+            align-items: center; /* Centralizar horizontalmente */
+            text-align: center;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: capitalize;
+            color: #0d404f; /* Cor do título principal */
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 14px;
+            font-weight: 300;
+            color: #0d404f;
+            line-height: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form{
+            display: flex;
+            flex-direction: column;
+            width: 70%; /* Ajustei a largura do formulário */
+        }
+
+        .form input {
+            height: 45px;
+            width: 100%;
+            border: none;
+            background-color: #ecf0f1;
+            margin: 8px 0; /* Ajustei a margem vertical */
+            padding-left: 40px; /* Espaço para o ícone */
+        }
+
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0px 1000px #ecf0f1 inset !important;
+            -webkit-text-fill-color: #000 !important;
+        }
+
+        .label-input {
+            position: relative; /* Para posicionar o ícone */
+            display: flex;
+            align-items: center;
+            background-color: #ecf0f1;
+            margin: 8px 0; /* Ajustei a margem vertical */
+            border-radius: 5px; /* Adicionei um pequeno border-radius */
+        }
+
+        .icon-modify {
+            color: #0d404f;
+            padding: 0 15px; /* Aumentei o padding */
+            position: absolute; /* Posiciona o ícone dentro do label */
+            left: 0;
+        }
+
+        .btn {
+            border-radius: 15px;
+            text-transform: uppercase;
+            color: #ffff;
+            font-size: 12px;
+            padding: 10px 50px;
+            font-weight: bold;
+            width: 100%; /* Largura total do botão */
+            align-self: center;
+            align-items: center;
+            border-width: 0px;
+            background-color: #68aed2;
+            cursor: pointer;
+            transition: background-color 1s ;
+            margin-top: 20px; /* Adicionei margem ao botão */
+        }
+
+        .btn:hover {
+            background-color: #0d404f;
+            color: #ffff;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            font-family: sans-serif;
+            text-decoration: none;
+            color: #0d404f;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .back-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background-color: #0d404f;
+            transition: width 0.3s ease;
+        }
+
+        .back-link:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="spinner-overlay">
+        <div class="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="content">
+            <h2 class="title">Login Administrador</h2>
+            <p class="description">Insira suas credenciais de administrador abaixo.</p>
+            <form id="adminLoginForm" class="form">
+                <label class="label-input">
+                    <i class="fa-solid fa-envelope icon-modify"></i>
+                    <input type="email" id="adminEmail" placeholder="Digite seu email" required>
+                </label>
+                <label class="label-input">
+                    <i class="fa-solid fa-lock icon-modify"></i>
+                    <input type="password" id="adminSenha" placeholder="Digite sua senha" required>
+                </label>
+                <button type="submit" class="btn" id="loginAdminBtn">Entrar</button>
+            </form>
+            <a href="/app/views/register/register.html" class="back-link" id="backToRegisterBtn">Voltar para a página de login de cliente</a>
+        </div>
+    </div>
+
+    <script>
+        const loginAdminForm = document.getElementById('adminLoginForm');
+        const loginAdminBtn = document.getElementById('loginAdminBtn');
+        const backToRegisterBtn = document.getElementById('backToRegisterBtn');
+        const spinnerOverlay = document.querySelector('.spinner-overlay');
+        let loaderTimeout; // Variável para controlar o timeout do loader
+
+        function showLoader() {
+            spinnerOverlay.classList.remove('fade-out'); // Garante que a classe de fade-out seja removida ao exibir
+            spinnerOverlay.style.display = 'flex';
+            // Define um timeout para esconder o loader após 5 segundos (caso a ação seja muito rápida)
+            loaderTimeout = setTimeout(hideLoader, 5000);
+        }
+
+        function hideLoader() {
+            clearTimeout(loaderTimeout); // Limpa o timeout caso a ação termine antes de 5 segundos
+            spinnerOverlay.classList.add('fade-out'); // Adiciona a classe para iniciar o fade-out
+            // Esconde o overlay após a duração da transição
+            setTimeout(() => {
+                spinnerOverlay.style.display = 'none';
+            }, 300); // 300ms é a duração da transição CSS
+        }
+
+        // Exibe o loader quando a página é carregada
+        window.onload = function() {
+            showLoader();
+            // Oculta o loader após um tempo (ajuste conforme necessário)
+            setTimeout(hideLoaderOnLoad, 1500); // Esconde após 1.5 segundos
+        };
+
+        function hideLoaderOnLoad() {
+            spinnerOverlay.classList.add('fade-out'); // Adiciona a classe para iniciar o fade-out
+            setTimeout(() => {
+                spinnerOverlay.style.display = 'none';
+            }, 300); // 300ms é a duração da transição CSS
+        }
+
+        // loginAdminForm.addEventListener('submit', function (e) {
+        //     e.preventDefault();
+        //     showLoader(); // Exibe o loader ao tentar logar
+
+        //     const email = document.getElementById('adminEmail').value;
+        //     const password = document.getElementById('adminSenha').value;
+
+        // //     fetch('/api/admin/login', {
+        // //         method: 'POST',
+        // //         headers: { 'Content-Type': 'application/json' },
+        // //         body: JSON.stringify({ email, password })
+        // //     })
+        // //     .then(res => res.json())
+        // //     .then(data => {
+        // //         clearTimeout(loaderTimeout); // Limpa o timeout, pois a resposta chegou
+        // //         hideLoader(); // Inicia o fade-out do loader
+        // //         if (data.status === 'ok') {
+        // //             setTimeout(() => {
+        // //                 window.location.href = '/admin/dashboard';
+        // //             }, 300); // Redireciona após o fade-out
+        // //         } else {
+        // //             alert('Erro no login de administrador: ' + (data.errors || ['Credenciais inválidas']).join(', '));
+        // //         }
+        // //     })
+        // //     .catch(() => {
+        // //         clearTimeout(loaderTimeout); // Limpa o timeout em caso de erro
+        // //         hideLoader(); // Inicia o fade-out do loader
+        // //         alert('Erro na requisição de login de administrador');
+        // //     });
+        // // });
+
+        document.getElementById("loginAdminBtn").addEventListener("click", function() {
+            showLoader();
+            setTimeout(() => {
+                window.location.href = "/app/views/admpage/admpage.html";
+            }, 1000);
+        });
+
+        backToRegisterBtn.addEventListener('click', function (e) {
+            e.preventDefault(); // Impedir o comportamento padrão do link
+            showLoader(); // Exibe o loader ao clicar em "Voltar"
+            spinnerOverlay.classList.add('fade-out'); // Adiciona a classe para iniciar o fade-out
+            setTimeout(() => {
+                window.location.href = this.getAttribute('href'); // Redireciona após a transição
+            }, 300); // 300ms é a duração da transição CSS
+        });
+    </script>
+</body>
+</html>

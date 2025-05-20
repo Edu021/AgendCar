@@ -1,0 +1,4402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgendCar - Painel Administrativo</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        /* Main CSS - Core Styles */
+        :root {
+            /* Brand Colors */
+            --primary: #0d404f;
+            --primary-light: #1a5e70;
+            --primary-dark: #082830;
+            --secondary: #bbc2c3;
+            --secondary-light: #d7dcdd;
+            --secondary-dark: #8e9394;
+            
+            /* Accent Colors */
+            --accent: #f87060;
+            --accent-light: #ff9480;
+            --accent-dark: #d65040;
+
+            /* Status Colors */
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #e74c3c;
+            --info: #3498db;
+            
+            /* Neutral Colors */
+            --white: #ffffff;
+            --light-100: #f8f9fa;
+            --light-200: #e9ecef;
+            --light-300: #dee2e6;
+            --dark-100: #6c757d;
+            --dark-200: #495057;
+            --dark-300: #343a40;
+            --black: #212529;
+            
+            /* UI Elements */
+            --body-bg: #f5f8fa;
+            --card-bg: var(--white);
+            --sidebar-bg: var(--primary);
+            --header-bg: var(--white);
+            
+            /* Spacing */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-md: 1rem;
+            --font-size-lg: 1.25rem;
+            --font-size-xl: 1.5rem;
+            --font-size-xxl: 2rem;
+            
+            /* Borders */
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --border-color: var(--light-300);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            
+            /* Transitions */
+            --transition-quick: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        /* Reset & Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: var(--font-family);
+            font-size: var(--font-size-md);
+            line-height: 1.5;
+            color: var(--dark-300);
+            background-color: var(--body-bg);
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary);
+            transition: color var(--transition-quick);
+        }
+
+        a:hover {
+            color: var(--primary-light);
+        }
+
+        button {
+            cursor: pointer;
+            font-family: var(--font-family);
+        }
+
+        /* Layout */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Main Header */
+        .main-header {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--spacing-lg);
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-left, .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--dark-300);
+        }
+
+        /* Search Input */
+        .search-container {
+            position: relative;
+            margin-right: var(--spacing-lg);
+        }
+
+        .search-input {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            padding-right: 40px;
+            border: 1px solid var(--light-300);
+            border-radius: 20px;
+            background-color: var(--light-100);
+            font-size: var(--font-size-sm);
+            transition: all var(--transition-quick);
+            width: 200px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            width: 250px;
+            border-color: var(--primary-light);
+            background-color: var(--white);
+            box-shadow: 0 0 0 3px rgba(13, 64, 79, 0.1);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--dark-100);
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+        }
+
+        /* Notification */
+        .notification-container {
+            position: relative;
+        }
+
+        .notification-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color var(--transition-quick);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9'%3E%3C/path%3E%3Cpath d='M13.73 21a2 2 0 0 1-3.46 0'%3E%3C/path%3E%3C/svg%3E");
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .notification-btn:hover {
+            background-color: var(--light-200);
+        }
+
+        .notification-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--danger);
+            border: 2px solid var(--white);
+        }
+
+        /* Content Container */
+        .content-container {
+            flex: 1;
+            padding: var(--spacing-lg);
+            position: relative;
+        }
+
+        .content-page {
+            display: none;
+        }
+
+        .content-page.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Dashboard Styles */
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            color: var(--white);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            transition: width var(--transition-normal);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--spacing-lg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: var(--white);
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .sidebar-logo {
+            display: none;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: var(--white);
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0;
+        }
+
+        .toggle-icon, .toggle-icon::before, .toggle-icon::after {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background-color: var(--white);
+            position: absolute;
+            transition: all var(--transition-quick);
+        }
+
+        .toggle-icon::before, .toggle-icon::after {
+            content: '';
+            left: 0;
+        }
+
+        .toggle-icon::before {
+            top: -5px;
+        }
+
+        .toggle-icon::after {
+            bottom: -5px;
+        }
+
+        .sidebar.collapsed .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-md) 0;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 2px;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-md) var(--spacing-lg);
+            color: rgba(255, 255, 255, 0.7);
+            transition: all var(--transition-quick);
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-item a:hover, .nav-item.active a {
+            color: var(--white);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--accent);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: var(--spacing-md);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.7;
+            transition: opacity var(--transition-quick);
+        }
+
+        .nav-item a:hover .nav-icon, .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .dashboard-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='7' height='7'%3E%3C/rect%3E%3Crect x='14' y='3' width='7' height='7'%3E%3C/rect%3E%3Crect x='14' y='14' width='7' height='7'%3E%3C/rect%3E%3Crect x='3' y='14' width='7' height='7'%3E%3C/rect%3E%3C/svg%3E");
+        }
+
+        .calendar-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        .services-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 13 5 5 11-11'%3E%3C/path%3E%3Cpath d='m12 12 5 5'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .clients-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'%3E%3C/path%3E%3Ccircle cx='9' cy='7' r='4'%3E%3C/circle%3E%3Cpath d='M22 21v-2a4 4 0 0 0-3-3.87'%3E%3C/path%3E%3Cpath d='M16 3.13a4 4 0 0 1 0 7.75'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .settings-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z'%3E%3C/path%3E%3Ccircle cx='12' cy='12' r='3'%3E%3C/circle%3E%3C/svg%3E");
+        }
+
+        .sidebar.collapsed .nav-text {
+            display: none;
+        }
+
+        .sidebar-footer {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: var(--spacing-md);
+            flex-shrink: 0;
+        }
+
+        .admin-details {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .admin-name {
+            display: block;
+            font-weight: 500;
+            font-size: var(--font-size-sm);
+            color: var(--white);
+        }
+
+        .logout-link {
+            font-size: var(--font-size-xs);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .logout-link:hover {
+            color: var(--white);
+        }
+
+        .sidebar.collapsed .admin-details {
+            display: none;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform var(--transition-quick);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: var(--font-size-xxl);
+            font-weight: 700;
+            color: var(--dark-300);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat-label {
+            font-size: var(--font-size-sm);
+            color: var(--dark-100);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--border-radius-md);
+            background-color: rgba(13, 64, 79, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 24px;
+        }
+
+        .appointments-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230d404f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 2v4'%3E%3C/path%3E%3Cpath d='M8 2v4'%3E%3C/path%3E%3Crect width='18' height='18' x='3' y='4' rx='2'%3E%3C/rect%3E%3Cpath d='M3 10h18'%3E%3C/path%3E%3Cpath d='M10 16h4'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .monthly-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230d404f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 2v4'%3E%3C/path%3E%3Cpath d='M16 2v4'%3E%3C/path%3E%3Crect width='18' height='18' x='3' y='4' rx='2'%3E%3C/rect%3E%3Cpath d='M3 10h18'%3E%3C/path%3E%3Cpath d='M8 14h.01'%3E%3C/path%3E%3Cpath d='M12 14h.01'%3E%3C/path%3E%3Cpath d='M16 14h.01'%3E%3C/path%3E%3Cpath d='M8 18h.01'%3E%3C/path%3E%3Cpath d='M12 18h.01'%3E%3C/path%3E%3Cpath d='M16 18h.01'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .services-dash-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230d404f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 6.1H3'%3E%3C/path%3E%3Cpath d='M21 12.1H3'%3E%3C/path%3E%3Cpath d='M15.1 18H3'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .revenue-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230d404f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z'%3E%3C/path%3E%3Cpath d='M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z'%3E%3C/path%3E%3Cpath d='M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12'%3E%3C/path%3E%3Cpath d='M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .dashboard-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .mini-table {
+            min-width: 0;
+        }
+
+        .mini-table th, .mini-table td {
+            padding: 8px 12px;
+        }
+
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+
+        /* Calendar */
+        .calendar-view .card-body {
+            padding: var(--spacing-md);
+        }
+
+        .calendar-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .mini-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .mini-calendar .weekday {
+            text-align: center;
+            padding: var(--spacing-xs);
+            font-weight: 600;
+            font-size: var(--font-size-xs);
+            color: var(--dark-200);
+            border-bottom: 1px solid var(--light-300);
+        }
+
+        .mini-calendar .day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-quick);
+            position: relative;
+            font-size: var(--font-size-xs);
+        }
+
+        .mini-calendar .day:hover {
+            background-color: var(--light-200);
+        }
+
+        .mini-calendar .day.other-month {
+            color: var(--light-300);
+        }
+
+        .mini-calendar .day.today {
+            background-color: var(--primary-light);
+            color: var(--white);
+        }
+
+        .mini-calendar .day.has-events::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: var(--accent);
+        }
+
+        .mini-calendar .day.today.has-events::after {
+            background-color: var(--white);
+        }
+
+        .day-number {
+            font-weight: 500;
+        }
+
+        .event-count {
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+
+        /* Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .settings-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+            padding: var(--spacing-lg);
+        }
+
+        .settings-card h3 {
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--light-300);
+            font-size: var(--font-size-lg);
+            color: var(--dark-300);
+        }
+
+        .hours-grid {
+            display: grid;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .day-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-xs) 0;
+        }
+
+        .day-name {
+            font-weight: 500;
+            color: var(--dark-200);
+            width: 120px;
+        }
+
+        .hours-inputs {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .time-input {
+            width: 100px;
+        }
+
+        .notification-option {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .option-description {
+            font-size: var(--font-size-xs);
+            color: var(--dark-100);
+            margin-left: 30px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        /* Page-specific toolbars */
+        .page-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            background-color: var(--white);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toolbar-left, .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .filter-select, .date-filter {
+            padding: 6px 12px;
+            border: 1px solid var(--light-300);
+            border-radius: var(--border-radius-sm);
+            background-color: var(--white);
+            font-size: var(--font-size-sm);
+        }
+
+        .search-field input {
+            padding: 6px 12px;
+            border: 1px solid var(--light-300);
+            border-radius: var(--border-radius-sm);
+            background-color: var(--white);
+            font-size: var(--font-size-sm);
+            width: 250px;
+        }
+
+        .view-toggle {
+            display: flex;
+            border: 1px solid var(--light-300);
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+        }
+
+        .view-btn {
+            background: none;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view-btn.active {
+            background-color: var(--primary);
+        }
+
+        .table-icon, .calendar-icon {
+            width: 16px;
+            height: 16px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+
+        .view-btn:not(.active) .table-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cline x1='3' y1='9' x2='21' y2='9'/%3E%3Cline x1='3' y1='15' x2='21' y2='15'/%3E%3Cline x1='9' y1='3' x2='9' y2='21'/%3E%3Cline x1='15' y1='3' x2='15' y2='21'/%3E%3C/svg%3E");
+        }
+
+        .view-btn.active .table-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cline x1='3' y1='9' x2='21' y2='9'/%3E%3Cline x1='3' y1='15' x2='21' y2='15'/%3E%3Cline x1='9' y1='3' x2='9' y2='21'/%3E%3Cline x1='15' y1='3' x2='15' y2='21'/%3E%3C/svg%3E");
+        }
+
+        .view-btn:not(.active) .calendar-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cline x1='3' y1='9' x2='21' y2='9'/%3E%3Cline x1='9' y1='3' x2='9' y2='21'/%3E%3C/svg%3E");
+        }
+
+        .view-btn.active .calendar-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cline x1='3' y1='9' x2='21' y2='9'/%3E%3Cline x1='9' y1='3' x2='9' y2='21'/%3E%3C/svg%3E");
+        }
+
+        .view-container {
+            display: none;
+        }
+
+        .view-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .service-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: transform var(--transition-quick);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-header {
+            padding: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--light-300);
+        }
+
+        .service-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--dark-300);
+            margin: 0;
+        }
+
+        .service-price {
+            font-size: var(--font-size-md);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .service-content {
+            padding: var(--spacing-md);
+        }
+
+        .service-description {
+            color: var(--dark-200);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--font-size-sm);
+        }
+
+        .service-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-sm);
+            color: var(--dark-100);
+            font-size: var(--font-size-xs);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .meta-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+        }
+
+        .service-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .service-actions .btn {
+            flex: 1;
+        }
+
+        /* Full Calendar */
+        .full-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: var(--spacing-md);
+        }
+
+        .calendar-day {
+            min-height: 120px;
+            border: 1px solid var(--light-300);
+            border-radius: var(--border-radius-sm);
+            padding: var(--spacing-xs);
+            position: relative;
+        }
+
+        .calendar-day.other-month {
+            background-color: var(--light-100);
+            opacity: 0.6;
+        }
+
+        .calendar-day.today {
+            border-color: var(--primary);
+            background-color: rgba(13, 64, 79, 0.05);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--font-size-sm);
+            padding-bottom: var(--spacing-xs);
+            border-bottom: 1px solid var(--light-300);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .day-number-full {
+            font-weight: 600;
+        }
+
+        .today .day-number-full {
+            color: var(--primary);
+        }
+
+        .calendar-events {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow-y: auto;
+            max-height: calc(100% - 30px);
+        }
+
+        .calendar-event {
+            font-size: var(--font-size-xs);
+            padding: 2px 4px;
+            border-radius: var(--border-radius-sm);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            transition: all var(--transition-quick);
+        }
+
+        .calendar-event:hover {
+            transform: translateX(2px);
+        }
+
+        .event-scheduled {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left: 3px solid #3498db;
+        }
+
+        .event-confirmed {
+            background-color: rgba(241, 196, 15, 0.1);
+            border-left: 3px solid #f1c40f;
+        }
+
+        .event-completed {
+            background-color: rgba(0, 184, 148, 0.1);
+            border-left: 3px solid var(--success);
+        }
+
+        .event-cancelled {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 3px solid var(--danger);
+            text-decoration: line-through;
+        }
+
+        /* Tables Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--spacing-lg);
+            font-size: var(--font-size-sm);
+            overflow: hidden;
+        }
+
+        .data-table thead {
+            background-color: var(--light-100);
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            color: var(--dark-200);
+            border-bottom: 2px solid var(--light-300);
+            position: relative;
+            user-select: none;
+        }
+
+        .data-table th.sortable {
+            cursor: pointer;
+        }
+
+        .data-table th.sortable::after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 15 5 5 5-5'/%3E%3Cpath d='m7 9 5-5 5 5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.4;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+
+        .data-table th.sortable.asc::after {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 15-6-6-6 6'/%3E%3C/svg%3E");
+            opacity: 1;
+        }
+
+        .data-table th.sortable.desc::after {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            opacity: 1;
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--light-300);
+            color: var(--dark-200);
+            vertical-align: middle;
+        }
+
+        .data-table tbody tr {
+            transition: background-color var(--transition-quick);
+        }
+
+        .data-table tbody tr:hover {
+            background-color: rgba(13, 64, 79, 0.02);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Action Buttons in Tables */
+        .table-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            border: none;
+            background-color: transparent;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            cursor: pointer;
+            transition: background-color var(--transition-quick);
+        }
+
+        .action-btn:hover {
+            background-color: var(--light-200);
+        }
+
+        .edit-btn {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3Z'/%3E%3C/svg%3E");
+        }
+
+        .delete-btn {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e74c3c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18'/%3E%3Cpath d='M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'/%3E%3Cpath d='M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'/%3E%3Cpath d='M10 11v6'/%3E%3Cpath d='M14 11v6'/%3E%3C/svg%3E");
+        }
+
+        .view-btn {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+        }
+
+        /* Empty State */
+        .table-empty-state {
+            padding: var(--spacing-xl) 0;
+            text-align: center;
+            color: var(--dark-100);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: var(--spacing-md);
+            color: var(--light-300);
+        }
+
+        .empty-state-text {
+            font-size: var(--font-size-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: var(--spacing-md);
+        }
+
+        .pagination-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--light-300);
+            background-color: var(--white);
+            border-radius: var(--border-radius-sm);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: all var(--transition-quick);
+        }
+
+        .pagination-btn:hover {
+            background-color: var(--light-200);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            font-size: var(--font-size-sm);
+            color: var(--dark-100);
+        }
+
+        /* Forms Styles */
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+            color: var(--dark-200);
+            font-size: var(--font-size-sm);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: var(--font-size-sm);
+            border: 1px solid var(--light-300);
+            border-radius: var(--border-radius-sm);
+            transition: border-color var(--transition-quick), box-shadow var(--transition-quick);
+            background-color: var(--white);
+            color: var(--dark-300);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(13, 64, 79, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: var(--dark-100);
+            opacity: 0.7;
+        }
+
+        .form-control:disabled {
+            background-color: var(--light-200);
+            cursor: not-allowed;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        /* Checkboxes and Radio Buttons */
+        input[type="checkbox"], input[type="radio"] {
+            margin-right: var(--spacing-xs);
+        }
+
+        /* Form Help Text */
+        .form-text {
+            display: block;
+            margin-top: var(--spacing-xs);
+            font-size: var(--font-size-xs);
+            color: var(--dark-100);
+        }
+
+        /* Validation States */
+        .form-control.is-invalid {
+            border-color: var(--danger);
+        }
+
+        .form-control.is-valid {
+            border-color: var(--success);
+        }
+
+        .invalid-feedback {
+            display: block;
+            width: 100%;
+            margin-top: var(--spacing-xs);
+            font-size: var(--font-size-xs);
+            color: var(--danger);
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--light-300);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .form-section h4 {
+            margin-bottom: var(--spacing-md);
+            color: var(--dark-300);
+            font-size: var(--font-size-md);
+            font-weight: 600;
+        }
+
+        /* Vehicle List in Client Form */
+        #clientVehiclesList {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .vehicle-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--spacing-md);
+            padding: var(--spacing-sm);
+            border: 1px solid var(--light-300);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: var(--spacing-xs);
+            align-items: center;
+            background-color: var(--light-100);
+        }
+
+        .vehicle-item:last-child {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .vehicle-item-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+
+        .vehicle-item-detail {
+            font-size: var(--font-size-xs);
+            background-color: var(--white);
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid var(--light-300);
+        }
+
+        .vehicle-item-detail strong {
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .remove-vehicle-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--danger);
+            width: 24px;
+            height: 24px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e74c3c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'/%3E%3Cpath d='m6 6 12 12'/%3E%3C/svg%3E");
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: var(--border-radius-sm);
+            transition: background-color var(--transition-quick);
+        }
+
+        .remove-vehicle-btn:hover {
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .add-vehicle-form {
+            padding: var(--spacing-md);
+            background-color: var(--light-100);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: var(--spacing-md);
+            border: 1px dashed var(--light-300);
+        }
+
+        /* Form Response */
+        .form-response {
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            border-radius: var(--border-radius-sm);
+            display: none;
+        }
+
+        .form-response.success {
+            background-color: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(0, 184, 148, 0.3);
+            display: block;
+        }
+
+        .form-response.error {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            display: block;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-lg);
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid var(--light-300);
+        }
+
+        .card-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--dark-300);
+            margin: 0;
+        }
+
+        .card-body {
+            padding: var(--spacing-lg);
+        }
+
+        .view-all {
+            color: var(--primary);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            transition: all var(--transition-quick);
+            border: 1px solid transparent;
+            font-size: var(--font-size-sm);
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-200);
+            color: var(--dark-200);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--light-300);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--light-300);
+            color: var(--dark-200);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background-color: #009b7d;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+        }
+
+        .badge-scheduled {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+        }
+
+        .badge-confirmed {
+            background-color: rgba(241, 196, 15, 0.1);
+            color: #f1c40f;
+        }
+
+        .badge-completed {
+            background-color: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+        }
+
+        .badge-cancelled {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .modal.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-container {
+            position: relative;
+            margin: 50px auto;
+            max-width: 700px;
+            width: 90%;
+            background-color: var(--white);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+            max-height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
+            border-bottom: 1px solid var(--light-300);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--dark-300);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--dark-100);
+            cursor: pointer;
+            transition: color var(--transition-quick);
+            line-height: 1;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: var(--spacing-lg);
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-top: 1px solid var(--light-300);
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-md);
+        }
+
+        /* Confirmation Modal */
+        .confirmation-container {
+            max-width: 500px;
+        }
+
+        /* Alert Modal */
+        .alert-container {
+            max-width: 400px;
+        }
+
+        /* Modal Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-50px); opacity: 0; }
+        }
+
+        .modal.hide {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        .modal.hide .modal-container {
+            animation: slideOut 0.3s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Loading Indicator */
+        .loading-indicator {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-indicator.visible {
+            display: flex;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--light-300);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--spacing-md);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .dashboard-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar:not(.collapsed) {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .main-header {
+                padding: 0 var(--spacing-md);
+            }
+            
+            .search-input {
+                width: 150px;
+            }
+            
+            .search-input:focus {
+                width: 180px;
+            }
+            
+            .content-container {
+                padding: var(--spacing-md);
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .full-calendar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-title {
+                font-size: var(--font-size-lg);
+            }
+            
+            .search-container {
+                display: none;
+            }
+            
+            .page-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-md);
+            }
+            
+            .toolbar-right {
+                width: 100%;
+            }
+            
+            .search-field input {
+                width: 100%;
+            }
+            
+            .modal-footer {
+                flex-direction: column-reverse;
+                gap: var(--spacing-sm);
+            }
+            
+            .modal-footer .btn {
+                width: 100%;
+            }
+            
+            .data-table thead {
+                display: none;
+            }
+            
+            .data-table, .data-table tbody, .data-table tr, .data-table td {
+                display: block;
+                width: 100%;
+            }
+            
+            .data-table tr {
+                margin-bottom: var(--spacing-md);
+                border: 1px solid var(--light-300);
+                border-radius: var(--border-radius-md);
+                padding: var(--spacing-sm);
+                background-color: var(--white);
+            }
+            
+            .data-table td {
+                display: flex;
+                justify-content: space-between;
+                text-align: right;
+                padding: 8px;
+                border-bottom: 1px solid var(--light-200);
+            }
+            
+            .data-table td:last-child {
+                border-bottom: none;
+            }
+            
+            .data-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--dark-300);
+                text-align: left;
+            }
+            
+            .table-actions {
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-logo">AgendCar</h1>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <span class="toggle-icon"></span>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <ul class="nav-menu">
+                    <li class="nav-item active" data-page="dashboard">
+                        <a href="#dashboard">
+                            <span class="nav-icon dashboard-icon"></span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="appointments">
+                        <a href="#appointments">
+                            <span class="nav-icon calendar-icon"></span>
+                            <span class="nav-text">Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="services">
+                        <a href="#services">
+                            <span class="nav-icon services-icon"></span>
+                            <span class="nav-text">Serviços</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="clients">
+                        <a href="#clients">
+                            <span class="nav-icon clients-icon"></span>
+                            <span class="nav-text">Clientes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-page="settings">
+                        <a href="#settings">
+                            <span class="nav-icon settings-icon"></span>
+                            <span class="nav-text">Configurações</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-footer">
+                <div class="admin-info">
+                    <div class="admin-avatar">
+                        <span>A</span>
+                    </div>
+                    <div class="admin-details">
+                        <span class="admin-name">Admin</span>
+                        <a href="/app/views/admlogin/admlogin.html" class="logout-link">Sair</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <h2 class="page-title" id="pageTitle">Dashboard</h2>
+                </div>
+            </header>
+
+            <!-- Content Container -->
+            <div class="content-container">
+                <!-- Dashboard Page -->
+                <section class="content-page active" id="dashboardPage">
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-content">
+                                <span class="stat-value">24</span>
+                                <span class="stat-label">Agendamentos Hoje</span>
+                            </div>
+                            <div class="stat-icon appointments-icon"></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-content">
+                                <span class="stat-value">186</span>
+                                <span class="stat-label">Agendamentos Mês</span>
+                            </div>
+                            <div class="stat-icon monthly-icon"></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-content">
+                                <span class="stat-value">12</span>
+                                <span class="stat-label">Serviços Disponíveis</span>
+                            </div>
+                            <div class="stat-icon services-dash-icon"></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-content">
+                                <span class="stat-value">R$ 15.840</span>
+                                <span class="stat-label">Faturamento Mensal</span>
+                            </div>
+                            <div class="stat-icon revenue-icon"></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-row">
+                        <div class="card upcoming-appointments">
+                            <div class="card-header">
+                                <h3 class="card-title">Próximos Agendamentos</h3>
+                                <a href="#appointments" class="view-all">Ver Todos</a>
+                            </div>
+                            <div class="card-body">
+                                <table class="data-table mini-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cliente</th>
+                                            <th>Serviço</th>
+                                            <th>Data/Hora</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="upcomingAppointmentsTable">
+                                        <!-- Will be populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-row">
+                        <div class="card calendar-view">
+                            <div class="card-header">
+                                <h3 class="card-title">Calendário de Agendamentos</h3>
+                                <div class="calendar-controls">
+                                    <button class="btn-icon" id="prevMonth">&lt;</button>
+                                    <span id="currentMonth">Agosto 2023</span>
+                                    <button class="btn-icon" id="nextMonth">&gt;</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="mini-calendar" id="miniCalendar">
+                                    <!-- Will be populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Appointments Page -->
+                <section class="content-page" id="appointmentsPage">
+                    <div class="page-toolbar">
+                        <div class="toolbar-left">
+                            <button class="btn btn-primary" id="newAppointmentBtn">Novo Agendamento</button>
+                            <div class="filter-group">
+                                <select class="filter-select" id="appointmentStatusFilter">
+                                    <option value="all">Todos os Status</option>
+                                    <option value="scheduled">Agendado</option>
+                                    <option value="confirmed">Confirmado</option>
+                                    <option value="completed">Concluído</option>
+                                    <option value="cancelled">Cancelado</option>
+                                </select>
+                                <input type="date" class="date-filter" id="appointmentDateFilter">
+                            </div>
+                        </div>
+                        <div class="toolbar-right">
+                            <div class="search-field">
+                                <input type="text" id="appointmentSearch" placeholder="Buscar agendamento...">
+                            </div>
+                            <div class="view-toggle">
+                                <button class="view-btn active" data-view="table"><span class="table-icon"></span></button>
+                                <button class="view-btn" data-view="calendar"><span class="calendar-icon"></span></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="appointments-wrapper">
+                        <!-- Table View -->
+                        <div class="view-container table-view active">
+                            <table class="data-table" id="appointmentsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Cliente</th>
+                                        <th>Veículo</th>
+                                        <th>Serviço</th>
+                                        <th>Data</th>
+                                        <th>Horário</th>
+                                        <th>Valor</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Will be populated by JS -->
+                                </tbody>
+                            </table>
+                            <div class="pagination">
+                                <button class="pagination-btn" id="prevPage">Anterior</button>
+                                <div class="pagination-info">Página <span id="currentPage">1</span> de <span id="totalPages">5</span></div>
+                                <button class="pagination-btn" id="nextPage">Próximo</button>
+                            </div>
+                        </div>
+
+                        <!-- Calendar View -->
+                        <div class="view-container calendar-view">
+                            <div class="full-calendar" id="appointmentsCalendar">
+                                <!-- Will be populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Services Page -->
+                <section class="content-page" id="servicesPage">
+                    <div class="page-toolbar">
+                        <div class="toolbar-left">
+                            <button class="btn btn-primary" id="newServiceBtn">Novo Serviço</button>
+                        </div>
+                        <div class="toolbar-right">
+                            <div class="search-field">
+                                <input type="text" id="serviceSearch" placeholder="Buscar serviço...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="services-wrapper">
+                        <div class="services-grid" id="servicesGrid">
+                            <!-- Will be populated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clients Page -->
+                <section class="content-page" id="clientsPage">
+                    <div class="page-toolbar">
+                        <div class="toolbar-left">
+                            <button class="btn btn-primary" id="newClientBtn">Novo Cliente</button>
+                        </div>
+                        <div class="toolbar-right">
+                            <div class="search-field">
+                                <input type="text" id="clientSearch" placeholder="Buscar cliente...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clients-wrapper">
+                        <table class="data-table" id="clientsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Telefone</th>
+                                    <th>Veículos</th>
+                                    <th>Agendamentos</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                        <div class="pagination">
+                            <button class="pagination-btn" id="clientPrevPage">Anterior</button>
+                            <div class="pagination-info">Página <span id="clientCurrentPage">1</span> de <span id="clientTotalPages">3</span></div>
+                            <button class="pagination-btn" id="clientNextPage">Próximo</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Page -->
+                <section class="content-page" id="settingsPage">
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3>Configurações da Empresa</h3>
+                            <form id="companySettingsForm">
+                                <div class="form-group">
+                                    <label>Nome da Empresa</label>
+                                    <input type="text" value="AgendCar" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email de Contato</label>
+                                    <input type="email" value="contato@agendcar.com.br" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Telefone</label>
+                                    <input type="tel" value="(11) 5555-5555" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Endereço</label>
+                                    <textarea class="form-control">Av. Paulista, 1000 - São Paulo, SP</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                            </form>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3>Horário de Funcionamento</h3>
+                            <form id="businessHoursForm">
+                                <div class="hours-grid">
+                                    <div class="day-row">
+                                        <span class="day-name">Segunda-feira</span>
+                                        <div class="hours-inputs">
+                                            <input type="time" value="08:00" class="form-control time-input">
+                                            <span>até</span>
+                                            <input type="time" value="18:00" class="form-control time-input">
+                                        </div>
+                                    </div>
+                                    <div class="day-row">
+                                        <span class="day-name">Terça-feira</span>
+                                        <div class="hours-inputs">
+                                            <input type="time" value="08:00" class="form-control time-input">
+                                            <span>até</span>
+                                            <input type="time" value="18:00" class="form-control time-input">
+                                        </div>
+                                    </div>
+                                    <div class="day-row">
+                                        <span class="day-name">Quarta-feira</span>
+                                        <div class="hours-inputs">
+                                            <input type="time" value="08:00" class="form-control time-input">
+                                            <span>até</span>
+                                            <input type="time" value="18:00" class="form-control time-input">
+                                        </div>
+                                    </div>
+                                    <div class="day-row">
+                                        <span class="day-name">Quinta-feira</span>
+                                        <div class="hours-inputs">
+                                            <input type="time" value="08:00" class="form-control time-input">
+                                            <span>até</span>
+                                            <input type="time" value="18:00" class="form-control time-input">
+                                        </div>
+                                    </div>
+                                    <div class="day-row">
+                                        <span class="day-name">Sexta-feira</span>
+                                        <div class="hours-inputs">
+                                            <input type="time" value="08:00" class="form-control time-input">
+                                            <span>até</span>
+                                            <input type="time" value="18:00" class="form-control time-input">
+                                        </div>
+                                    </div>
+                                    <div class="day-row">
+                                        <span class="day-name">Sábado</span>
+                                        <div class="hours-inputs">
+                                            <input type="time" value="09:00" class="form-control time-input">
+                                            <span>até</span>
+                                            <input type="time" value="13:00" class="form-control time-input">
+                                        </div>
+                                    </div>
+                                    <div class="day-row">
+                                        <span class="day-name">Domingo</span>
+                                        <div class="hours-inputs">
+                                            <input type="checkbox" id="closedSunday" checked>
+                                            <label for="closedSunday">Fechado</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Horários</button>
+                            </form>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3>Configurações de Notificações</h3>
+                            <form id="notificationsSettingsForm">
+                                <div class="notification-option">
+                                    <div class="option-label">
+                                        <input type="checkbox" id="emailNotifications" checked>
+                                        <label for="emailNotifications">Notificações por E-mail</label>
+                                    </div>
+                                    <p class="option-description">Enviar e-mails para clientes sobre agendamentos</p>
+                                </div>
+                                <div class="notification-option">
+                                    <div class="option-label">
+                                        <input type="checkbox" id="smsNotifications">
+                                        <label for="smsNotifications">Notificações por SMS</label>
+                                    </div>
+                                    <p class="option-description">Enviar SMS para clientes sobre agendamentos</p>
+                                </div>
+                                <div class="notification-option">
+                                    <div class="option-label">
+                                        <input type="checkbox" id="reminderNotifications" checked>
+                                        <label for="reminderNotifications">Lembretes de Agendamento</label>
+                                    </div>
+                                    <p class="option-description">Enviar lembretes 24h antes do agendamento</p>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Configurações</button>
+                            </form>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3>Segurança da Conta</h3>
+                            <form id="securitySettingsForm">
+                                <div class="form-group">
+                                    <label>Alterar Senha</label>
+                                    <input type="password" placeholder="Senha atual" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Nova senha" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Confirmar nova senha" class="form-control">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Atualizar Senha</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Appointment Edit Modal -->
+    <div class="modal" id="appointmentModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="appointmentModalTitle">Novo Agendamento</h3>
+                <button class="modal-close" data-modal="appointmentModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="appointmentForm">
+                    <input type="hidden" id="appointmentId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appointmentClient">Cliente</label>
+                            <select id="appointmentClient" class="form-control" required>
+                                <option value="">Selecione um cliente</option>
+                                <!-- Will be populated by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentVehicle">Veículo</label>
+                            <select id="appointmentVehicle" class="form-control" required>
+                                <option value="">Selecione um veículo</option>
+                                <!-- Will be populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appointmentService">Serviço</label>
+                            <select id="appointmentService" class="form-control" required>
+                                <option value="">Selecione um serviço</option>
+                                <!-- Will be populated by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentValue">Valor (R$)</label>
+                            <input type="number" step="0.01" id="appointmentValue" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appointmentDate">Data</label>
+                            <input type="date" id="appointmentDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentTime">Horário</label>
+                            <input type="time" id="appointmentTime" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appointmentStatus">Status</label>
+                            <select id="appointmentStatus" class="form-control" required>
+                                <option value="scheduled">Agendado</option>
+                                <option value="confirmed">Confirmado</option>
+                                <option value="completed">Concluído</option>
+                                <option value="cancelled">Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentNotes">Observações</label>
+                            <textarea id="appointmentNotes" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close-btn" data-modal="appointmentModal">Cancelar</button>
+                <button class="btn btn-primary" id="saveAppointmentBtn">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Edit Modal -->
+    <div class="modal" id="serviceModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="serviceModalTitle">Novo Serviço</h3>
+                <button class="modal-close" data-modal="serviceModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="serviceForm">
+                    <input type="hidden" id="serviceId">
+                    <div class="form-group">
+                        <label for="serviceName">Nome do Serviço</label>
+                        <input type="text" id="serviceName" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="servicePrice">Preço (R$)</label>
+                            <input type="number" step="0.01" id="servicePrice" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceDuration">Duração (minutos)</label>
+                            <input type="number" id="serviceDuration" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceDescription">Descrição</label>
+                        <textarea id="serviceDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceIcon">Ícone</label>
+                        <select id="serviceIcon" class="form-control">
+                            <option value="car-wash">Lavagem</option>
+                            <option value="polish">Polimento</option>
+                            <option value="shield">Cristalização</option>
+                            <option value="clean">Higienização</option>
+                            <option value="repair">Reparos</option>
+                            <option value="paint">Pintura</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="serviceActive" checked>
+                            <label for="serviceActive">Serviço Ativo</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close-btn" data-modal="serviceModal">Cancelar</button>
+                <button class="btn btn-primary" id="saveServiceBtn">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container confirmation-container">
+            <div class="modal-header">
+                <h3 id="confirmationTitle">Confirmação</h3>
+                <button class="modal-close" data-modal="confirmationModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmationMessage">Tem certeza que deseja realizar esta ação?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close-btn" data-modal="confirmationModal">Cancelar</button>
+                <button class="btn btn-danger" id="confirmActionBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal" id="alertModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container alert-container">
+            <div class="modal-header">
+                <h3 id="alertTitle">Aviso</h3>
+                <button class="modal-close" data-modal="alertModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="alertMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary modal-close-btn" data-modal="alertModal">Ok</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Edit Modal -->
+    <div class="modal" id="clientModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="clientModalTitle">Novo Cliente</h3>
+                <button class="modal-close" data-modal="clientModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="clientForm">
+                    <input type="hidden" id="clientId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientName">Nome</label>
+                            <input type="text" id="clientName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientEmail">Email</label>
+                            <input type="email" id="clientEmail" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientPhone">Telefone</label>
+                            <input type="tel" id="clientPhone" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h4>Veículos do Cliente</h4>
+                        <div id="clientVehiclesList">
+                            <!-- Vehicle list will be dynamically added here -->
+                        </div>
+                        <button type="button" class="btn btn-outline" id="addVehicleBtn">Adicionar Veículo</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close-btn" data-modal="clientModal">Cancelar</button>
+                <button class="btn btn-primary" id="saveClientBtn">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading-indicator" id="loadingIndicator">
+        <div class="spinner"></div>
+        <span>Carregando...</span>
+    </div>
+
+    <script>
+        // Utility functions
+        const utils = {
+            // Format date to display in UI
+            formatDate: function(dateString) {
+                const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                return new Date(dateString).toLocaleDateString('pt-BR', options);
+            },
+            
+            // Format time to display in UI
+            formatTime: function(timeString) {
+                const options = { hour: '2-digit', minute: '2-digit' };
+                return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('pt-BR', options);
+            },
+            
+            // Format currency values
+            formatCurrency: function(value) {
+                return new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }).format(value);
+            },
+            
+            // Generate a unique ID
+            generateId: function() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+            },
+            
+            // Display loading indicator
+            showLoading: function() {
+                document.getElementById('loadingIndicator').classList.add('visible');
+            },
+            
+            // Hide loading indicator
+            hideLoading: function() {
+                document.getElementById('loadingIndicator').classList.remove('visible');
+            },
+            
+            // Show alert modal
+            showAlert: function(title, message) {
+                const alertTitle = document.getElementById('alertTitle');
+                const alertMessage = document.getElementById('alertMessage');
+                
+                alertTitle.textContent = title;
+                alertMessage.textContent = message;
+                
+                modalUtils.openModal('alertModal');
+            },
+            
+            // Show confirmation modal
+            showConfirmation: function(title, message, callback) {
+                const confirmTitle = document.getElementById('confirmationTitle');
+                const confirmMessage = document.getElementById('confirmationMessage');
+                const confirmBtn = document.getElementById('confirmActionBtn');
+                
+                confirmTitle.textContent = title;
+                confirmMessage.textContent = message;
+                
+                // Remove existing event listener
+                const newConfirmBtn = confirmBtn.cloneNode(true);
+                confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+                
+                // Add new event listener
+                newConfirmBtn.addEventListener('click', () => {
+                    modalUtils.closeModal('confirmationModal');
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                });
+                
+                modalUtils.openModal('confirmationModal');
+            },
+            
+            // Map status to display text
+            getStatusText: function(status) {
+                const statusMap = {
+                    'scheduled': 'Agendado',
+                    'confirmed': 'Confirmado',
+                    'completed': 'Concluído',
+                    'cancelled': 'Cancelado'
+                };
+                
+                return statusMap[status] || status;
+            },
+            
+            // Map status to CSS class
+            getStatusClass: function(status) {
+                const classMap = {
+                    'scheduled': 'badge-scheduled',
+                    'confirmed': 'badge-confirmed',
+                    'completed': 'badge-completed',
+                    'cancelled': 'badge-cancelled'
+                };
+                
+                return classMap[status] || '';
+            },
+            
+            // Validate form field
+            validateField: function(field, errorMessage = 'Este campo é obrigatório') {
+                const value = field.value.trim();
+                const isValid = value !== '';
+                
+                if (!isValid) {
+                    field.classList.add('is-invalid');
+                    
+                    // Check if error message already exists
+                    let errorElement = field.nextElementSibling;
+                    if (!errorElement || !errorElement.classList.contains('invalid-feedback')) {
+                        errorElement = document.createElement('div');
+                        errorElement.className = 'invalid-feedback';
+                        errorElement.textContent = errorMessage;
+                        field.parentNode.insertBefore(errorElement, field.nextSibling);
+                    }
+                } else {
+                    field.classList.remove('is-invalid');
+                    
+                    // Remove error message if it exists
+                    const errorElement = field.nextElementSibling;
+                    if (errorElement && errorElement.classList.contains('invalid-feedback')) {
+                        errorElement.remove();
+                    }
+                }
+                
+                return isValid;
+            },
+            
+            // Filter data table
+            filterDataTable: function(tableId, filterValue) {
+                const table = document.getElementById(tableId);
+                const rows = table.querySelectorAll('tbody tr');
+                let resultsCount = 0;
+                
+                filterValue = filterValue.toLowerCase();
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    if (text.includes(filterValue)) {
+                        row.style.display = '';
+                        resultsCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                // Show or hide empty state message
+                const emptyState = document.querySelector(`#${tableId}-empty`);
+                if (emptyState) {
+                    emptyState.style.display = resultsCount === 0 ? 'block' : 'none';
+                }
+                
+                return resultsCount;
+            },
+            
+            // Convert form data to object
+            formToObject: function(form) {
+                const formData = new FormData(form);
+                const data = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+                
+                return data;
+            },
+            
+            // Deep copy object
+            deepCopy: function(obj) {
+                return JSON.parse(JSON.stringify(obj));
+            }
+        };
+
+        // Modal functionality
+        const modalUtils = {
+            // Open modal
+            openModal: function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (!modal) return;
+                
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                
+                // Focus first input if available
+                setTimeout(() => {
+                    const firstInput = modal.querySelector('input, select, textarea');
+                    if (firstInput) firstInput.focus();
+                }, 300);
+            },
+            
+            // Close modal
+            closeModal: function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (!modal) return;
+                
+                modal.classList.add('hide');
+                
+                // After animation completes
+                setTimeout(() => {
+                    modal.classList.remove('show', 'hide');
+                    document.body.style.overflow = '';
+                    
+                    // Reset form if modal contains a form
+                    const form = modal.querySelector('form');
+                    if (form) form.reset();
+                    
+                    // Remove validation errors
+                    const invalidFields = modal.querySelectorAll('.is-invalid');
+                    invalidFields.forEach(field => field.classList.remove('is-invalid'));
+                    
+                    const errorMessages = modal.querySelectorAll('.invalid-feedback');
+                    errorMessages.forEach(message => message.remove());
+                }, 300);
+            },
+            
+            // Initialize modal functionality
+            initModals: function() {
+                // Close modal when clicking on close button or overlay
+                document.querySelectorAll('.modal-close, .modal-close-btn, .modal-overlay').forEach(element => {
+                    element.addEventListener('click', function(e) {
+                        const modalId = this.dataset.modal || this.closest('.modal').id;
+                        modalUtils.closeModal(modalId);
+                    });
+                });
+                
+                // Close modal when pressing Escape key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        const openModal = document.querySelector('.modal.show');
+                        if (openModal) {
+                            modalUtils.closeModal(openModal.id);
+                        }
+                    }
+                });
+                
+                // Prevent closing modal when clicking inside
+                document.querySelectorAll('.modal-container').forEach(container => {
+                    container.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+                });
+            }
+        };
+
+        // Dashboard data and functionality
+        let dashboardData = {
+            recentAppointments: [],
+            serviceStats: [],
+            calendarEvents: []
+        };
+
+        // Initialize dashboard
+        function initDashboard() {
+            fetchDashboardData();
+            setupDashboardEvents();
+            renderMiniCalendar();
+        }
+
+        // Fetch dashboard data
+        function fetchDashboardData() {
+            // For demo, we'll use mock data
+            // In a real app, this would be an API call
+            utils.showLoading();
+            
+            setTimeout(() => {
+                // Mock data for upcoming appointments
+                dashboardData.recentAppointments = [
+                    {
+                        id: 1,
+                        client: 'Carlos Silva',
+                        service: 'Lavagem Completa',
+                        date: '2023-08-25',
+                        time: '14:30',
+                        status: 'confirmed'
+                    },
+                    {
+                        id: 2,
+                        client: 'Mariana Costa',
+                        service: 'Polimento',
+                        date: '2023-08-25',
+                        time: '16:00',
+                        status: 'scheduled'
+                    },
+                    {
+                        id: 3,
+                        client: 'Roberto Almeida',
+                        service: 'Cristalização',
+                        date: '2023-08-26',
+                        time: '10:00',
+                        status: 'scheduled'
+                    },
+                    {
+                        id: 4,
+                        client: 'Luiza Santos',
+                        service: 'Higienização',
+                        date: '2023-08-26',
+                        time: '13:30',
+                        status: 'confirmed'
+                    },
+                    {
+                        id: 5,
+                        client: 'Pedro Oliveira',
+                        service: 'Lavagem Completa',
+                        date: '2023-08-27',
+                        time: '09:00',
+                        status: 'scheduled'
+                    }
+                ];
+                
+                // Mock data for top services
+                dashboardData.serviceStats = [
+                    { name: 'Lavagem Completa', count: 45 },
+                    { name: 'Polimento', count: 32 },
+                    { name: 'Cristalização', count: 18 },
+                    { name: 'Higienização', count: 25 }
+                ];
+                
+                // Mock data for calendar events
+                dashboardData.calendarEvents = [];
+                
+                // Generate calendar events for the current month
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = today.getMonth();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                for (let i = 1; i <= daysInMonth; i++) {
+                    // Random number of events per day (0-5)
+                    const eventCount = Math.floor(Math.random() * 6);
+                    
+                    for (let j = 0; j < eventCount; j++) {
+                        dashboardData.calendarEvents.push({
+                            id: utils.generateId(),
+                            date: `${year}-${(month + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`,
+                            status: ['scheduled', 'confirmed', 'completed', 'cancelled'][Math.floor(Math.random() * 4)]
+                        });
+                    }
+                }
+                
+                renderDashboard();
+                utils.hideLoading();
+            }, 500);
+        }
+
+        // Render dashboard data
+        function renderDashboard() {
+            renderUpcomingAppointments();
+            renderServiceStats();
+            renderMiniCalendar();
+        }
+
+        // Render upcoming appointments
+        function renderUpcomingAppointments() {
+            const tableBody = document.getElementById('upcomingAppointmentsTable');
+            tableBody.innerHTML = '';
+            
+            dashboardData.recentAppointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${appointment.client}</td>
+                    <td>${appointment.service}</td>
+                    <td>${utils.formatDate(appointment.date)} ${utils.formatTime(appointment.time)}</td>
+                    <td><span class="status-badge ${utils.getStatusClass(appointment.status)}">${utils.getStatusText(appointment.status)}</span></td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Render service stats (placeholder for chart)
+        function renderServiceStats() {
+            // In a real application, you'd use a chart library like Chart.js
+            const chartContainer = document.getElementById('servicesChart');
+            
+            // For this demo, we'll just show a text representation
+            chartContainer.innerHTML = '<div style="padding: 20px; text-align: center;">Gráfico de serviços mais populares</div>';
+            
+            // Mock data would be visualized in a bar or pie chart
+        }
+
+        // Setup dashboard events
+        function setupDashboardEvents() {
+            // Calendar navigation
+            document.getElementById('prevMonth').addEventListener('click', () => {
+                navigateCalendar(-1);
+            });
+            
+            document.getElementById('nextMonth').addEventListener('click', () => {
+                navigateCalendar(1);
+            });
+        }
+
+        // Navigate calendar months
+        function navigateCalendar(direction) {
+            // Get current displayed month
+            const currentMonthEl = document.getElementById('currentMonth');
+            const [month, year] = currentMonthEl.textContent.split(' ');
+            
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                              'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const currentMonthIndex = monthNames.indexOf(month);
+            
+            // Calculate new month
+            let newMonthIndex = currentMonthIndex + direction;
+            let newYear = parseInt(year);
+            
+            if (newMonthIndex < 0) {
+                newMonthIndex = 11;
+                newYear--;
+            } else if (newMonthIndex > 11) {
+                newMonthIndex = 0;
+                newYear++;
+            }
+            
+            currentMonthEl.textContent = `${monthNames[newMonthIndex]} ${newYear}`;
+            
+            // Re-render calendar
+            renderMiniCalendar(newMonthIndex, newYear);
+        }
+
+        // Render mini calendar
+        function renderMiniCalendar(monthIndex, year) {
+            const calendarEl = document.getElementById('miniCalendar');
+            
+            if (!calendarEl) return;
+            
+            const today = new Date();
+            
+            if (monthIndex === undefined) {
+                monthIndex = today.getMonth();
+            }
+            
+            if (year === undefined) {
+                year = today.getFullYear();
+            }
+            
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                              'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            
+            // Update month display
+            document.getElementById('currentMonth').textContent = `${monthNames[monthIndex]} ${year}`;
+            
+            // Clear calendar
+            calendarEl.innerHTML = '';
+            
+            // Add weekday headers
+            const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            
+            weekdays.forEach(day => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'weekday';
+                dayEl.textContent = day;
+                calendarEl.appendChild(dayEl);
+            });
+            
+            // Get first day of month and total days
+            const firstDay = new Date(year, monthIndex, 1);
+            const lastDay = new Date(year, monthIndex + 1, 0);
+            const totalDays = lastDay.getDate();
+            
+            // Add empty cells for days before first day of month
+            const firstDayIndex = firstDay.getDay();
+            for (let i = 0; i < firstDayIndex; i++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'day other-month';
+                
+                // Calculate the day for the previous month
+                const prevMonthLastDay = new Date(year, monthIndex, 0).getDate();
+                dayEl.innerHTML = `<span class="day-number">${prevMonthLastDay - firstDayIndex + i + 1}</span>`;
+                
+                calendarEl.appendChild(dayEl);
+            }
+            
+            // Add days of current month
+            for (let day = 1; day <= totalDays; day++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'day';
+                
+                // Check if day is today
+                const isToday = day === today.getDate() && monthIndex === today.getMonth() && year === today.getFullYear();
+                if (isToday) {
+                    dayEl.classList.add('today');
+                }
+                
+                // Check if day has events
+                const dateStr = `${year}-${(monthIndex + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                const dayEvents = dashboardData.calendarEvents.filter(event => event.date === dateStr);
+                
+                if (dayEvents.length > 0) {
+                    dayEl.classList.add('has-events');
+                    dayEl.innerHTML = `
+                        <span class="day-number">${day}</span>
+                        <span class="event-count">${dayEvents.length}</span>
+                    `;
+                } else {
+                    dayEl.innerHTML = `<span class="day-number">${day}</span>`;
+                }
+                
+                dayEl.addEventListener('click', () => {
+                    // Navigate to appointments page with filter
+                    document.querySelector('[data-page="appointments"] a').click();
+                    document.getElementById('appointmentDateFilter').value = dateStr;
+                    
+                    // Trigger filter change event
+                    const event = new Event('change');
+                    document.getElementById('appointmentDateFilter').dispatchEvent(event);
+                });
+                
+                calendarEl.appendChild(dayEl);
+            }
+            
+            // Add empty cells for days after last day of month
+            const lastDayIndex = lastDay.getDay();
+            const nextDaysCount = 6 - lastDayIndex;
+            
+            for (let i = 1; i <= nextDaysCount; i++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'day other-month';
+                dayEl.innerHTML = `<span class="day-number">${i}</span>`;
+                
+                calendarEl.appendChild(dayEl);
+            }
+        }
+
+        // Appointments data and functionality
+        let appointmentsData = [];
+        let filteredAppointments = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+
+        // Initialize appointments
+        function initAppointments() {
+            fetchAppointments();
+            setupAppointmentsEvents();
+        }
+
+        // Fetch appointments
+        function fetchAppointments() {
+            utils.showLoading();
+            
+            setTimeout(() => {
+                // Mock data for appointments
+                appointmentsData = [
+                    {
+                        id: 1,
+                        client: 'Carlos Silva',
+                        vehicle: 'Volkswagen Golf - ABC1234',
+                        service: 'Lavagem Completa',
+                        date: '2023-08-25',
+                        time: '14:30',
+                        value: 150,
+                        status: 'confirmed',
+                        notes: 'Cliente solicitou atenção especial nos bancos'
+                    },
+                    {
+                        id: 2,
+                        client: 'Mariana Costa',
+                        vehicle: 'Toyota Corolla - XYZ9876',
+                        service: 'Polimento',
+                        date: '2023-08-25',
+                        time: '16:00',
+                        value: 280,
+                        status: 'scheduled',
+                        notes: ''
+                    },
+                    {
+                        id: 3,
+                        client: 'Roberto Almeida',
+                        vehicle: 'Honda Civic - DEF5432',
+                        service: 'Cristalização',
+                        date: '2023-08-26',
+                        time: '10:00',
+                        value: 400,
+                        status: 'scheduled',
+                        notes: 'Veículo com alguns riscos profundos'
+                    },
+                    {
+                        id: 4,
+                        client: 'Luiza Santos',
+                        vehicle: 'Hyundai HB20 - GHI7890',
+                        service: 'Higienização',
+                        date: '2023-08-26',
+                        time: '13:30',
+                        value: 200,
+                        status: 'confirmed',
+                        notes: 'Foco na limpeza do ar condicionado'
+                    },
+                    {
+                        id: 5,
+                        client: 'Pedro Oliveira',
+                        vehicle: 'Jeep Compass - JKL2345',
+                        service: 'Lavagem Completa',
+                        date: '2023-08-27',
+                        time: '09:00',
+                        value: 150,
+                        status: 'scheduled',
+                        notes: ''
+                    },
+                    {
+                        id: 6,
+                        client: 'Ana Ferreira',
+                        vehicle: 'Fiat Argo - MNO6789',
+                        service: 'Higienização',
+                        date: '2023-08-24',
+                        time: '11:00',
+                        value: 200,
+                        status: 'completed',
+                        notes: 'Cliente muito satisfeita'
+                    },
+                    {
+                        id: 7,
+                        client: 'Fernando Gomes',
+                        vehicle: 'Chevrolet Onix - PQR0123',
+                        service: 'Polimento',
+                        date: '2023-08-24',
+                        time: '15:30',
+                        value: 280,
+                        status: 'cancelled',
+                        notes: 'Cliente cancelou por problemas pessoais'
+                    }
+                ];
+                
+                // Add more mock data for pagination
+                for (let i = 8; i <= 30; i++) {
+                    appointmentsData.push({
+                        id: i,
+                        client: `Cliente ${i}`,
+                        vehicle: `Veículo ${i} - AAA${i}123`,
+                        service: ['Lavagem Completa', 'Polimento', 'Cristalização', 'Higienização'][Math.floor(Math.random() * 4)],
+                        date: `2023-08-${Math.floor(Math.random() * 30) + 1}`.padStart(10, '0'),
+                        time: `${Math.floor(Math.random() * 9) + 8}:${Math.floor(Math.random() * 6) * 10}`.padStart(5, '0'),
+                        value: [150, 280, 400, 200][Math.floor(Math.random() * 4)],
+                        status: ['scheduled', 'confirmed', 'completed', 'cancelled'][Math.floor(Math.random() * 4)],
+                        notes: ''
+                    });
+                }
+                
+                filteredAppointments = [...appointmentsData];
+                renderAppointmentsTable();
+                renderAppointmentsCalendar();
+                utils.hideLoading();
+            }, 500);
+        }
+
+        // Setup appointments events
+        function setupAppointmentsEvents() {
+            // Toggle between table and calendar view
+            document.querySelectorAll('.view-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const view = this.dataset.view;
+                    
+                    // Update active button
+                    document.querySelectorAll('.view-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show selected view
+                    document.querySelectorAll('.view-container').forEach(container => {
+                        container.classList.remove('active');
+                    });
+                    document.querySelector(`.${view}-view`).classList.add('active');
+                });
+            });
+            
+            // Filter appointments
+            document.getElementById('appointmentStatusFilter').addEventListener('change', filterAppointments);
+            document.getElementById('appointmentDateFilter').addEventListener('change', filterAppointments);
+            
+            // Search appointments
+            document.getElementById('appointmentSearch').addEventListener('input', function() {
+                const searchValue = this.value.trim();
+                
+                if (searchValue === '') {
+                    // Reset to filtered list
+                    filterAppointments();
+                    return;
+                }
+                
+                filteredAppointments = appointmentsData.filter(appointment => {
+                    const searchTerms = [
+                        appointment.client,
+                        appointment.vehicle,
+                        appointment.service,
+                        utils.formatDate(appointment.date),
+                        utils.getStatusText(appointment.status)
+                    ].map(term => term.toLowerCase());
+                    
+                    return searchTerms.some(term => term.includes(searchValue.toLowerCase()));
+                });
+                
+                currentPage = 1;
+                renderAppointmentsTable();
+            });
+            
+            // New appointment button
+            document.getElementById('newAppointmentBtn').addEventListener('click', () => {
+                document.getElementById('appointmentModalTitle').textContent = 'Novo Agendamento';
+                document.getElementById('appointmentId').value = '';
+                populateAppointmentFormSelects();
+                
+                // Set default date to today
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('appointmentDate').value = today;
+                
+                modalUtils.openModal('appointmentModal');
+            });
+            
+            // Save appointment button
+            document.getElementById('saveAppointmentBtn').addEventListener('click', saveAppointment);
+            
+            // Pagination
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderAppointmentsTable();
+                }
+            });
+            
+            document.getElementById('nextPage').addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredAppointments.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderAppointmentsTable();
+                }
+            });
+        }
+
+        // Filter appointments
+        function filterAppointments() {
+            const statusFilter = document.getElementById('appointmentStatusFilter').value;
+            const dateFilter = document.getElementById('appointmentDateFilter').value;
+            
+            filteredAppointments = [...appointmentsData];
+            
+            // Apply status filter
+            if (statusFilter !== 'all') {
+                filteredAppointments = filteredAppointments.filter(appointment => {
+                    return appointment.status === statusFilter;
+                });
+            }
+            
+            // Apply date filter
+            if (dateFilter) {
+                filteredAppointments = filteredAppointments.filter(appointment => {
+                    return appointment.date === dateFilter;
+                });
+            }
+            
+            // Reset to first page
+            currentPage = 1;
+            
+            // Render filtered results
+            renderAppointmentsTable();
+            renderAppointmentsCalendar();
+        }
+
+        // Render appointments table
+        function renderAppointmentsTable() {
+            const tableBody = document.getElementById('appointmentsTable').querySelector('tbody');
+            tableBody.innerHTML = '';
+            
+            // Calculate pagination
+            const totalPages = Math.ceil(filteredAppointments.length / itemsPerPage);
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedAppointments = filteredAppointments.slice(start, end);
+            
+            // Update pagination info
+            document.getElementById('currentPage').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPages;
+            
+            // Enable/disable pagination buttons
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages || totalPages === 0;
+            
+            // Show no results message if needed
+            if (filteredAppointments.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="9" class="text-center">Nenhum agendamento encontrado</td>
+                `;
+                tableBody.appendChild(row);
+                return;
+            }
+            
+            // Render appointments
+            paginatedAppointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td data-label="ID">${appointment.id}</td>
+                    <td data-label="Cliente">${appointment.client}</td>
+                    <td data-label="Veículo">${appointment.vehicle}</td>
+                    <td data-label="Serviço">${appointment.service}</td>
+                    <td data-label="Data">${utils.formatDate(appointment.date)}</td>
+                    <td data-label="Horário">${utils.formatTime(appointment.time)}</td>
+                    <td data-label="Valor">${utils.formatCurrency(appointment.value)}</td>
+                    <td data-label="Status"><span class="status-badge ${utils.getStatusClass(appointment.status)}">${utils.getStatusText(appointment.status)}</span></td>
+                    <td data-label="Ações">
+                        <div class="table-actions">
+                            <button class="action-btn edit-btn" data-id="${appointment.id}" title="Editar"></button>
+                            <button class="action-btn delete-btn" data-id="${appointment.id}" title="Excluir"></button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners to action buttons
+            tableBody.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = parseInt(button.dataset.id);
+                    editAppointment(id);
+                });
+            });
+            
+            tableBody.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = parseInt(button.dataset.id);
+                    deleteAppointment(id);
+                });
+            });
+        }
+
+        // Render appointments calendar view
+        function renderAppointmentsCalendar() {
+            const calendarEl = document.getElementById('appointmentsCalendar');
+            calendarEl.innerHTML = '';
+            
+            // Get current month
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth();
+            
+            // Add weekday headers
+            const weekdays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+            
+            weekdays.forEach(day => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'weekday';
+                dayEl.textContent = day;
+                calendarEl.appendChild(dayEl);
+            });
+            
+            // Get first day of month and total days
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const totalDays = lastDay.getDate();
+            
+            // Add empty cells for days before first day of month
+            const firstDayIndex = firstDay.getDay();
+            for (let i = 0; i < firstDayIndex; i++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day other-month';
+                
+                // Calculate the day for the previous month
+                const prevMonthLastDay = new Date(year, month, 0).getDate();
+                dayEl.innerHTML = `
+                    <div class="day-header">
+                        <span class="day-number-full">${prevMonthLastDay - firstDayIndex + i + 1}</span>
+                    </div>
+                    <div class="calendar-events"></div>
+                `;
+                
+                calendarEl.appendChild(dayEl);
+            }
+            
+            // Add days of current month
+            for (let day = 1; day <= totalDays; day++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                
+                // Check if day is today
+                const isToday = day === today.getDate() && month === today.getMonth();
+                if (isToday) {
+                    dayEl.classList.add('today');
+                }
+                
+                // Format date string for filtering events
+                const dateStr = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                
+                // Filter events for this day
+                const dayEvents = filteredAppointments.filter(appointment => appointment.date === dateStr);
+                
+                // Create day header
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'day-header';
+                dayHeader.innerHTML = `
+                    <span class="day-number-full">${day}</span>
+                    ${dayEvents.length > 0 ? `<span class="event-count">${dayEvents.length}</span>` : ''}
+                `;
+                
+                // Create events container
+                const eventsContainer = document.createElement('div');
+                eventsContainer.className = 'calendar-events';
+                
+                // Add events to container
+                dayEvents.forEach(event => {
+                    const eventEl = document.createElement('div');
+                    eventEl.className = `calendar-event event-${event.status}`;
+                    eventEl.dataset.id = event.id;
+                    eventEl.innerHTML = `${utils.formatTime(event.time)} - ${event.client}`;
+                    
+                    // Add click event
+                    eventEl.addEventListener('click', () => {
+                        editAppointment(parseInt(event.id));
+                    });
+                    
+                    eventsContainer.appendChild(eventEl);
+                });
+                
+                dayEl.appendChild(dayHeader);
+                dayEl.appendChild(eventsContainer);
+                calendarEl.appendChild(dayEl);
+            }
+            
+            // Add empty cells for days after last day of month
+            const lastDayIndex = lastDay.getDay();
+            const nextDaysCount = 6 - lastDayIndex;
+            
+            for (let i = 1; i <= nextDaysCount; i++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day other-month';
+                dayEl.innerHTML = `
+                    <div class="day-header">
+                        <span class="day-number-full">${i}</span>
+                    </div>
+                    <div class="calendar-events"></div>
+                `;
+                
+                calendarEl.appendChild(dayEl);
+            }
+        }
+
+        // Edit appointment
+        function editAppointment(id) {
+            const appointment = appointmentsData.find(a => a.id === id);
+            
+            if (appointment) {
+                document.getElementById('appointmentModalTitle').textContent = 'Editar Agendamento';
+                document.getElementById('appointmentId').value = appointment.id;
+                
+                // Populate form selects
+                populateAppointmentFormSelects(appointment);
+                
+                // Set form values
+                document.getElementById('appointmentDate').value = appointment.date;
+                document.getElementById('appointmentTime').value = appointment.time;
+                document.getElementById('appointmentStatus').value = appointment.status;
+                document.getElementById('appointmentValue').value = appointment.value;
+                document.getElementById('appointmentNotes').value = appointment.notes;
+                
+                modalUtils.openModal('appointmentModal');
+            }
+        }
+
+        // Delete appointment
+        function deleteAppointment(id) {
+            utils.showConfirmation(
+                'Confirmar Exclusão',
+                'Tem certeza que deseja excluir este agendamento?',
+                () => {
+                    // Filter out the appointment
+                    appointmentsData = appointmentsData.filter(a => a.id !== id);
+                    
+                    // Update filtered list
+                    filteredAppointments = filteredAppointments.filter(a => a.id !== id);
+                    
+                    // Re-render views
+                    renderAppointmentsTable();
+                    renderAppointmentsCalendar();
+                    
+                    utils.showAlert('Sucesso', 'Agendamento excluído com sucesso!');
+                }
+            );
+        }
+
+        // Populate appointment form selects
+        function populateAppointmentFormSelects(appointment = null) {
+            // Client select
+            const clientSelect = document.getElementById('appointmentClient');
+            clientSelect.innerHTML = '<option value="">Selecione um cliente</option>';
+            
+            // Mock clients
+            const clients = [
+                { id: 1, name: 'Carlos Silva' },
+                { id: 2, name: 'Mariana Costa' },
+                { id: 3, name: 'Roberto Almeida' },
+                { id: 4, name: 'Luiza Santos' },
+                { id: 5, name: 'Pedro Oliveira' },
+                { id: 6, name: 'Ana Ferreira' },
+                { id: 7, name: 'Fernando Gomes' }
+            ];
+            
+            clients.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.id;
+                option.textContent = client.name;
+                clientSelect.appendChild(option);
+            });
+            
+            // Vehicle select
+            const vehicleSelect = document.getElementById('appointmentVehicle');
+            vehicleSelect.innerHTML = '<option value="">Selecione um veículo</option>';
+            
+            // Mock vehicles per client
+            const vehicles = {
+                1: [{ id: 1, name: 'Volkswagen Golf - ABC1234' }],
+                2: [{ id: 2, name: 'Toyota Corolla - XYZ9876' }],
+                3: [{ id: 3, name: 'Honda Civic - DEF5432' }],
+                4: [{ id: 4, name: 'Hyundai HB20 - GHI7890' }],
+                5: [{ id: 5, name: 'Jeep Compass - JKL2345' }],
+                6: [{ id: 6, name: 'Fiat Argo - MNO6789' }],
+                7: [{ id: 7, name: 'Chevrolet Onix - PQR0123' }]
+            };
+            
+            // Service select
+            const serviceSelect = document.getElementById('appointmentService');
+            serviceSelect.innerHTML = '<option value="">Selecione um serviço</option>';
+            
+            // Mock services
+            const services = [
+                { id: 1, name: 'Lavagem Completa', price: 150 },
+                { id: 2, name: 'Polimento', price: 280 },
+                { id: 3, name: 'Cristalização', price: 400 },
+                { id: 4, name: 'Higienização', price: 200 }
+            ];
+            
+            services.forEach(service => {
+                const option = document.createElement('option');
+                option.value = service.id;
+                option.textContent = `${service.name} - ${utils.formatCurrency(service.price)}`;
+                option.dataset.price = service.price;
+                serviceSelect.appendChild(option);
+            });
+            
+            // If editing, set selected values
+            if (appointment) {
+                // Find and select client
+                const clientOption = Array.from(clientSelect.options).find(option => option.textContent === appointment.client);
+                if (clientOption) {
+                    clientOption.selected = true;
+                    
+                    // Load vehicles for selected client
+                    const clientId = clientOption.value;
+                    if (vehicles[clientId]) {
+                        vehicles[clientId].forEach(vehicle => {
+                            const option = document.createElement('option');
+                            option.value = vehicle.id;
+                            option.textContent = vehicle.name;
+                            vehicleSelect.appendChild(option);
+                        });
+                    }
+                    
+                    // Find and select vehicle
+                    const vehicleOption = Array.from(vehicleSelect.options).find(option => option.textContent === appointment.vehicle);
+                    if (vehicleOption) {
+                        vehicleOption.selected = true;
+                    }
+                }
+                
+                // Find and select service
+                const serviceOption = Array.from(serviceSelect.options).find(option => option.textContent.startsWith(appointment.service));
+                if (serviceOption) {
+                    serviceOption.selected = true;
+                }
+            }
+            
+            // Handle client change to load appropriate vehicles
+            clientSelect.addEventListener('change', function() {
+                const clientId = this.value;
+                
+                // Clear vehicle select
+                vehicleSelect.innerHTML = '<option value="">Selecione um veículo</option>';
+                
+                if (!clientId) return;
+                
+                // Load vehicles for selected client
+                if (vehicles[clientId]) {
+                    vehicles[clientId].forEach(vehicle => {
+                        const option = document.createElement('option');
+                        option.value = vehicle.id;
+                        option.textContent = vehicle.name;
+                        vehicleSelect.appendChild(option);
+                    });
+                }
+            });
+            
+            // Handle service change to update price
+            serviceSelect.addEventListener('change', function() {
+                const serviceId = this.value;
+                const priceInput = document.getElementById('appointmentValue');
+                
+                if (!serviceId) {
+                    priceInput.value = '';
+                    return;
+                }
+                
+                const selectedOption = this.options[this.selectedIndex];
+                priceInput.value = selectedOption.dataset.price;
+            });
+        }
+
+        // Save appointment
+        function saveAppointment() {
+            // Validate form
+            const form = document.getElementById('appointmentForm');
+            let isValid = true;
+            
+            // Required fields
+            const requiredFields = ['appointmentClient', 'appointmentVehicle', 'appointmentService', 
+                                'appointmentValue', 'appointmentDate', 'appointmentTime'];
+                                
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!utils.validateField(field)) {
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Get form data
+            const id = document.getElementById('appointmentId').value;
+            const clientSelect = document.getElementById('appointmentClient');
+            const client = clientSelect.options[clientSelect.selectedIndex].text;
+            const vehicleSelect = document.getElementById('appointmentVehicle');
+            const vehicle = vehicleSelect.options[vehicleSelect.selectedIndex].text;
+            const serviceSelect = document.getElementById('appointmentService');
+            const service = serviceSelect.options[serviceSelect.selectedIndex].text.split(' - ')[0];
+            const date = document.getElementById('appointmentDate').value;
+            const time = document.getElementById('appointmentTime').value;
+            const value = parseFloat(document.getElementById('appointmentValue').value);
+            const status = document.getElementById('appointmentStatus').value;
+            const notes = document.getElementById('appointmentNotes').value;
+            
+            // Create appointment object
+            const appointment = {
+                id: id ? parseInt(id) : appointmentsData.length + 1,
+                client,
+                vehicle,
+                service,
+                date,
+                time,
+                value,
+                status,
+                notes
+            };
+            
+            // Add or update appointment
+            if (id) {
+                // Update existing appointment
+                const index = appointmentsData.findIndex(a => a.id === parseInt(id));
+                appointmentsData[index] = appointment;
+                
+                // Update filtered appointments if necessary
+                const filteredIndex = filteredAppointments.findIndex(a => a.id === parseInt(id));
+                if (filteredIndex !== -1) {
+                    filteredAppointments[filteredIndex] = appointment;
+                }
+            } else {
+                // Add new appointment
+                appointmentsData.push(appointment);
+                
+                // Add to filtered appointments if it matches the filters
+                const statusFilter = document.getElementById('appointmentStatusFilter').value;
+                const dateFilter = document.getElementById('appointmentDateFilter').value;
+                
+                let shouldAdd = true;
+                
+                if (statusFilter !== 'all' && appointment.status !== statusFilter) {
+                    shouldAdd = false;
+                }
+                
+                if (dateFilter && appointment.date !== dateFilter) {
+                    shouldAdd = false;
+                }
+                
+                if (shouldAdd) {
+                    filteredAppointments.push(appointment);
+                }
+            }
+            
+            // Close modal
+            modalUtils.closeModal('appointmentModal');
+            
+            // Render views
+            renderAppointmentsTable();
+            renderAppointmentsCalendar();
+            
+            // Show success message
+            utils.showAlert('Sucesso', id ? 'Agendamento atualizado com sucesso!' : 'Agendamento criado com sucesso!');
+        }
+
+        // Services data and functionality
+        let servicesData = [];
+
+        // Initialize services
+        function initServices() {
+            fetchServices();
+            setupServicesEvents();
+        }
+
+        // Fetch services
+        function fetchServices() {
+            utils.showLoading();
+            
+            setTimeout(() => {
+                // Mock data for services
+                servicesData = [
+                    {
+                        id: 1,
+                        name: 'Lavagem Completa',
+                        description: 'Limpeza completa interna e externa do seu veículo com produtos premium.',
+                        price: 150,
+                        duration: 60,
+                        icon: 'car-wash',
+                        active: true
+                    },
+                    {
+                        id: 2,
+                        name: 'Polimento',
+                        description: 'Polimento profissional para remover riscos e restaurar o brilho da pintura.',
+                        price: 280,
+                        duration: 120,
+                        icon: 'polish',
+                        active: true
+                    },
+                    {
+                        id: 3,
+                        name: 'Cristalização',
+                        description: 'Proteção duradoura que mantém seu carro brilhando por mais tempo.',
+                        price: 400,
+                        duration: 180,
+                        icon: 'shield',
+                        active: true
+                    },
+                    {
+                        id: 4,
+                        name: 'Higienização',
+                        description: 'Limpeza profunda de estofados e ar condicionado.',
+                        price: 200,
+                        duration: 120,
+                        icon: 'clean',
+                        active: true
+                    }
+                ];
+                
+                renderServicesGrid();
+                utils.hideLoading();
+            }, 500);
+        }
+
+        // Setup services events
+        function setupServicesEvents() {
+            // Search services
+            document.getElementById('serviceSearch').addEventListener('input', function() {
+                const searchValue = this.value.trim().toLowerCase();
+                const servicesGrid = document.getElementById('servicesGrid');
+                
+                // Show all services if search is empty
+                if (searchValue === '') {
+                    renderServicesGrid();
+                    return;
+                }
+                
+                // Filter services by name or description
+                const filteredServices = servicesData.filter(service => {
+                    return (
+                        service.name.toLowerCase().includes(searchValue) ||
+                        service.description.toLowerCase().includes(searchValue)
+                    );
+                });
+                
+                renderServicesGrid(filteredServices);
+            });
+            
+            // New service button
+            document.getElementById('newServiceBtn').addEventListener('click', () => {
+                document.getElementById('serviceModalTitle').textContent = 'Novo Serviço';
+                document.getElementById('serviceId').value = '';
+                document.getElementById('serviceActive').checked = true;
+                
+                modalUtils.openModal('serviceModal');
+            });
+            
+            // Save service button
+            document.getElementById('saveServiceBtn').addEventListener('click', saveService);
+        }
+
+        // Render services grid
+        function renderServicesGrid(services = null) {
+            const grid = document.getElementById('servicesGrid');
+            grid.innerHTML = '';
+            
+            const data = services || servicesData;
+            
+            if (data.length === 0) {
+                grid.innerHTML = '<div class="empty-state">Nenhum serviço encontrado</div>';
+                return;
+            }
+            
+            data.forEach(service => {
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                
+                // Get icon based on service.icon
+                let iconSvg;
+                switch (service.icon) {
+                    case 'car-wash':
+                        iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.4 16 9 16 9s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7h-2.3c-.7 0-1.4.3-1.9.8L6 8.5V13h0c0 1.1.9 2 2 2h1.5"></path><path d="M9 17h1"></path><path d="M17 17h1"></path><path d="M5 11h3"></path><circle cx="7.5" cy="17.5" r="2.5"></circle><circle cx="16.5" cy="17.5" r="2.5"></circle></svg>';
+                        break;
+                    case 'polish':
+                        iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20a8 8 0 0 0 8-8"></path><path d="M12 12v8"></path><path d="M12 12a8 8 0 0 1-8-8"></path><path d="M12 4v8"></path><path d="m9 12 3-3 3 3"></path></svg>';
+                        break;
+                    case 'shield':
+                        iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path></svg>';
+                        break;
+                    case 'clean':
+                        iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>';
+                        break;
+                    case 'repair':
+                        iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>';
+                        break;
+                    case 'paint':
+                        iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"></path><path d="m18 2 4 4"></path><path d="m14 6 4 4"></path><path d="M3.3 14.4 14 5"></path><path d="M5 18a2 2 0 1 0 4 0c0-1-4-3-4-3s-4 2-4 3a2 2 0 0 0 4 0Z"></path></svg>';
+                        break;
+                    default:
+                        iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11 3 17l5 5 6-6"></path><path d="m13 7 7 7-4 4-7-7V7h4Z"></path></svg>';
+                }
+                
+                card.innerHTML = `
+                    <div class="service-header">
+                        <h3 class="service-title">${service.name}</h3>
+                        <div class="service-price">${utils.formatCurrency(service.price)}</div>
+                    </div>
+                    <div class="service-content">
+                        <p class="service-description">${service.description}</p>
+                        <div class="service-meta">
+                            <div class="meta-item">
+                                <span class="meta-icon">${iconSvg}</span>
+                                <span>${service.duration} min</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        ${service.active ? 
+                                        '<path d="m9 12 2 2 4-4"></path>' : 
+                                        '<path d="m15 9-6 6"></path><path d="m9 9 6 6"></path>'}
+                                    </svg>
+                                </span>
+                                <span>${service.active ? 'Ativo' : 'Inativo'}</span>
+                            </div>
+                        </div>
+                        <div class="service-actions">
+                            <button class="btn btn-primary edit-service-btn" data-id="${service.id}">Editar</button>
+                            <button class="btn btn-danger delete-service-btn" data-id="${service.id}">Excluir</button>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+            
+            // Add event listeners
+            document.querySelectorAll('.edit-service-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = parseInt(button.dataset.id);
+                    editService(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-service-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = parseInt(button.dataset.id);
+                    deleteService(id);
+                });
+            });
+        }
+
+        // Edit service
+        function editService(id) {
+            const service = servicesData.find(s => s.id === id);
+            
+            if (service) {
+                document.getElementById('serviceModalTitle').textContent = 'Editar Serviço';
+                document.getElementById('serviceId').value = service.id;
+                document.getElementById('serviceName').value = service.name;
+                document.getElementById('servicePrice').value = service.price;
+                document.getElementById('serviceDuration').value = service.duration;
+                document.getElementById('serviceDescription').value = service.description;
+                document.getElementById('serviceIcon').value = service.icon;
+                document.getElementById('serviceActive').checked = service.active;
+                
+                modalUtils.openModal('serviceModal');
+            }
+        }
+
+        // Delete service
+        function deleteService(id) {
+            utils.showConfirmation(
+                'Confirmar Exclusão',
+                'Tem certeza que deseja excluir este serviço?',
+                () => {
+                    // Filter out the service
+                    servicesData = servicesData.filter(s => s.id !== id);
+                    
+                    // Re-render services
+                    renderServicesGrid();
+                    
+                    utils.showAlert('Sucesso', 'Serviço excluído com sucesso!');
+                }
+            );
+        }
+
+        // Save service
+        function saveService() {
+            // Validate form
+            const form = document.getElementById('serviceForm');
+            let isValid = true;
+            
+            // Required fields
+            const requiredFields = ['serviceName', 'servicePrice', 'serviceDuration'];
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!utils.validateField(field)) {
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Get form data
+            const id = document.getElementById('serviceId').value;
+            const name = document.getElementById('serviceName').value;
+            const price = parseFloat(document.getElementById('servicePrice').value);
+            const duration = parseInt(document.getElementById('serviceDuration').value);
+            const description = document.getElementById('serviceDescription').value;
+            const icon = document.getElementById('serviceIcon').value;
+            const active = document.getElementById('serviceActive').checked;
+            
+            // Create service object
+            const service = {
+                id: id ? parseInt(id) : servicesData.length + 1,
+                name,
+                description,
+                price,
+                duration,
+                icon,
+                active
+            };
+            
+            // Add or update service
+            if (id) {
+                // Update existing service
+                const index = servicesData.findIndex(s => s.id === parseInt(id));
+                servicesData[index] = service;
+            } else {
+                // Add new service
+                servicesData.push(service);
+            }
+            
+            // Close modal
+            modalUtils.closeModal('serviceModal');
+            
+            // Render services
+            renderServicesGrid();
+            
+            // Show success message
+            utils.showAlert('Sucesso', id ? 'Serviço atualizado com sucesso!' : 'Serviço criado com sucesso!');
+        }
+
+        // Clients data and functionality
+        let clientsData = [];
+        let filteredClients = [];
+        let clientCurrentPage = 1;
+        const clientItemsPerPage = 10;
+
+        // Initialize clients
+        function initClients() {
+            fetchClients();
+            setupClientsEvents();
+        }
+
+        // Fetch clients
+        function fetchClients() {
+            utils.showLoading();
+            
+            setTimeout(() => {
+                // Mock data for clients
+                clientsData = [
+                    {
+                        id: 1,
+                        name: 'Carlos Silva',
+                        email: 'carlos.silva@email.com',
+                        phone: '(11) 98765-4321',
+                        vehicles: [
+                            { id: 1, plate: 'ABC1234', make: 'Volkswagen', model: 'Golf', type: 'Hatch', color: 'Preto' }
+                        ],
+                        appointments: 5
+                    },
+                    {
+                        id: 2,
+                        name: 'Mariana Costa',
+                        email: 'mariana.costa@email.com',
+                        phone: '(11) 91234-5678',
+                        vehicles: [
+                            { id: 2, plate: 'XYZ9876', make: 'Toyota', model: 'Corolla', type: 'Sedan', color: 'Prata' }
+                        ],
+                        appointments: 3
+                    },
+                    {
+                        id: 3,
+                        name: 'Roberto Almeida',
+                        email: 'roberto.almeida@email.com',
+                        phone: '(11) 99876-5432',
+                        vehicles: [
+                            { id: 3, plate: 'DEF5432', make: 'Honda', model: 'Civic', type: 'Sedan', color: 'Azul' }
+                        ],
+                        appointments: 2
+                    },
+                    {
+                        id: 4,
+                        name: 'Luiza Santos',
+                        email: 'luiza.santos@email.com',
+                        phone: '(11) 98765-1234',
+                        vehicles: [
+                            { id: 4, plate: 'GHI7890', make: 'Hyundai', model: 'HB20', type: 'Hatch', color: 'Branco' }
+                        ],
+                        appointments: 4
+                    },
+                    {
+                        id: 5,
+                        name: 'Pedro Oliveira',
+                        email: 'pedro.oliveira@email.com',
+                        phone: '(11) 91234-9876',
+                        vehicles: [
+                            { id: 5, plate: 'JKL2345', make: 'Jeep', model: 'Compass', type: 'SUV', color: 'Preto' }
+                        ],
+                        appointments: 1
+                    }
+                ];
+                
+                // Add more mock clients for pagination
+                for (let i = 6; i <= 25; i++) {
+                    clientsData.push({
+                        id: i,
+                        name: `Cliente ${i}`,
+                        email: `cliente${i}@email.com`,
+                        phone: `(11) 9${Math.floor(Math.random() * 10000)}-${Math.floor(Math.random() * 10000)}`,
+                        vehicles: [
+                            { 
+                                id: i, 
+                                plate: `AAA${Math.floor(Math.random() * 10000)}`, 
+                                make: ['Volkswagen', 'Toyota', 'Honda', 'Hyundai', 'Jeep', 'Fiat', 'Chevrolet'][Math.floor(Math.random() * 7)], 
+                                model: `Modelo ${i}`,
+                                type: ['Hatch', 'Sedan', 'SUV', 'Pickup', 'Van'][Math.floor(Math.random() * 5)],
+                                color: ['Preto', 'Branco', 'Prata', 'Azul', 'Vermelho'][Math.floor(Math.random() * 5)]
+                            }
+                        ],
+                        appointments: Math.floor(Math.random() * 10)
+                    });
+                }
+                
+                filteredClients = [...clientsData];
+                renderClientsTable();
+                utils.hideLoading();
+            }, 500);
+        }
+
+        // Setup clients events
+        function setupClientsEvents() {
+            // Search clients
+            document.getElementById('clientSearch').addEventListener('input', function() {
+                const searchValue = this.value.trim();
+                
+                if (searchValue === '') {
+                    filteredClients = [...clientsData];
+                    clientCurrentPage = 1;
+                    renderClientsTable();
+                    return;
+                }
+                
+                filteredClients = clientsData.filter(client => {
+                    const searchLower = searchValue.toLowerCase();
+                    return (
+                        client.name.toLowerCase().includes(searchLower) ||
+                        client.email.toLowerCase().includes(searchLower) ||
+                        client.phone.toLowerCase().includes(searchLower)
+                    );
+                });
+                
+                clientCurrentPage = 1;
+                renderClientsTable();
+            });
+            
+            // New client button
+            document.getElementById('newClientBtn').addEventListener('click', () => {
+                document.getElementById('clientModalTitle').textContent = 'Novo Cliente';
+                document.getElementById('clientId').value = '';
+                document.getElementById('clientVehiclesList').innerHTML = '';
+                
+                modalUtils.openModal('clientModal');
+            });
+            
+            // Save client button
+            document.getElementById('saveClientBtn').addEventListener('click', saveClient);
+            
+            // Add vehicle button
+            document.getElementById('addVehicleBtn').addEventListener('click', () => {
+                const vehiclesList = document.getElementById('clientVehiclesList');
+                
+                const vehicleItem = document.createElement('div');
+                vehicleItem.className = 'vehicle-item';
+                vehicleItem.innerHTML = `
+                    <div class="vehicle-item-details">
+                        <div class="vehicle-item-detail"><strong>Placa:</strong> <input type="text" class="vehicle-plate" placeholder="AAA0000" required></div>
+                        <div class="vehicle-item-detail"><strong>Marca:</strong> <input type="text" class="vehicle-make" placeholder="Marca" required></div>
+                        <div class="vehicle-item-detail"><strong>Modelo:</strong> <input type="text" class="vehicle-model" placeholder="Modelo" required></div>
+                        <div class="vehicle-item-detail"><strong>Tipo:</strong> 
+                            <select class="vehicle-type">
+                                <option value="Hatch">Hatch</option>
+                                <option value="Sedan">Sedan</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Pickup">Pickup</option>
+                                <option value="Van">Van</option>
+                            </select>
+                        </div>
+                        <div class="vehicle-item-detail"><strong>Cor:</strong> <input type="text" class="vehicle-color" placeholder="Cor" required></div>
+                    </div>
+                    <button type="button" class="remove-vehicle-btn"></button>
+                `;
+                
+                vehiclesList.appendChild(vehicleItem);
+                
+                // Add event listener to remove button
+                vehicleItem.querySelector('.remove-vehicle-btn').addEventListener('click', () => {
+                    vehicleItem.remove();
+                });
+            });
+            
+            // Pagination
+            document.getElementById('clientPrevPage').addEventListener('click', () => {
+                if (clientCurrentPage > 1) {
+                    clientCurrentPage--;
+                    renderClientsTable();
+                }
+            });
+            
+            document.getElementById('clientNextPage').addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredClients.length / clientItemsPerPage);
+                if (clientCurrentPage < totalPages) {
+                    clientCurrentPage++;
+                    renderClientsTable();
+                }
+            });
+        }
+
+        // Render clients table
+        function renderClientsTable() {
+            const tableBody = document.getElementById('clientsTable').querySelector('tbody');
+            tableBody.innerHTML = '';
+            
+            // Calculate pagination
+            const totalPages = Math.ceil(filteredClients.length / clientItemsPerPage);
+            const start = (clientCurrentPage - 1) * clientItemsPerPage;
+            const end = start + clientItemsPerPage;
+            const paginatedClients = filteredClients.slice(start, end);
+            
+            // Update pagination info
+            document.getElementById('clientCurrentPage').textContent = clientCurrentPage;
+            document.getElementById('clientTotalPages').textContent = totalPages;
+            
+            // Enable/disable pagination buttons
+            document.getElementById('clientPrevPage').disabled = clientCurrentPage === 1;
+            document.getElementById('clientNextPage').disabled = clientCurrentPage === totalPages || totalPages === 0;
+            
+            // Show no results message if needed
+            if (filteredClients.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="7" class="text-center">Nenhum cliente encontrado</td>
+                `;
+                tableBody.appendChild(row);
+                return;
+            }
+            
+            // Render clients
+            paginatedClients.forEach(client => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td data-label="ID">${client.id}</td>
+                    <td data-label="Nome">${client.name}</td>
+                    <td data-label="Email">${client.email}</td>
+                    <td data-label="Telefone">${client.phone}</td>
+                    <td data-label="Veículos">${client.vehicles.length}</td>
+                    <td data-label="Agendamentos">${client.appointments}</td>
+                    <td data-label="Ações">
+                        <div class="table-actions">
+                            <button class="action-btn edit-btn" data-id="${client.id}" title="Editar"></button>
+                            <button class="action-btn delete-btn" data-id="${client.id}" title="Excluir"></button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners to action buttons
+            tableBody.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = parseInt(button.dataset.id);
+                    editClient(id);
+                });
+            });
+            
+            tableBody.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = parseInt(button.dataset.id);
+                    deleteClient(id);
+                });
+            });
+        }
+
+        // Edit client
+        function editClient(id) {
+            const client = clientsData.find(c => c.id === id);
+            
+            if (client) {
+                document.getElementById('clientModalTitle').textContent = 'Editar Cliente';
+                document.getElementById('clientId').value = client.id;
+                document.getElementById('clientName').value = client.name;
+                document.getElementById('clientEmail').value = client.email;
+                document.getElementById('clientPhone').value = client.phone;
+                
+                // Add vehicles
+                const vehiclesList = document.getElementById('clientVehiclesList');
+                vehiclesList.innerHTML = '';
+                
+                client.vehicles.forEach(vehicle => {
+                    const vehicleItem = document.createElement('div');
+                    vehicleItem.className = 'vehicle-item';
+                    vehicleItem.dataset.id = vehicle.id;
+                    
+                    vehicleItem.innerHTML = `
+                        <div class="vehicle-item-details">
+                            <div class="vehicle-item-detail"><strong>Placa:</strong> ${vehicle.plate}</div>
+                            <div class="vehicle-item-detail"><strong>Marca:</strong> ${vehicle.make}</div>
+                            <div class="vehicle-item-detail"><strong>Modelo:</strong> ${vehicle.model}</div>
+                            <div class="vehicle-item-detail"><strong>Tipo:</strong> ${vehicle.type}</div>
+                            <div class="vehicle-item-detail"><strong>Cor:</strong> ${vehicle.color}</div>
+                        </div>
+                        <button type="button" class="remove-vehicle-btn"></button>
+                    `;
+                    
+                    vehiclesList.appendChild(vehicleItem);
+                    
+                    // Add event listener to remove button
+                    vehicleItem.querySelector('.remove-vehicle-btn').addEventListener('click', () => {
+                        vehicleItem.remove();
+                    });
+                });
+                
+                modalUtils.openModal('clientModal');
+            }
+        }
+
+        // Delete client
+        function deleteClient(id) {
+            utils.showConfirmation(
+                'Confirmar Exclusão',
+                'Tem certeza que deseja excluir este cliente e todos os seus veículos?',
+                () => {
+                    // Filter out the client
+                    clientsData = clientsData.filter(c => c.id !== id);
+                    
+                    // Update filtered list
+                    filteredClients = filteredClients.filter(c => c.id !== id);
+                    
+                    // Re-render clients
+                    renderClientsTable();
+                    
+                    utils.showAlert('Sucesso', 'Cliente excluído com sucesso!');
+                }
+            );
+        }
+
+        // Save client
+        function saveClient() {
+            // Validate form
+            const form = document.getElementById('clientForm');
+            let isValid = true;
+            
+            // Required fields
+            const requiredFields = ['clientName', 'clientEmail', 'clientPhone'];
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!utils.validateField(field)) {
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Get form data
+            const id = document.getElementById('clientId').value;
+            const name = document.getElementById('clientName').value;
+            const email = document.getElementById('clientEmail').value;
+            const phone = document.getElementById('clientPhone').value;
+            
+            // Get vehicles data
+            const vehicleItems = document.querySelectorAll('#clientVehiclesList .vehicle-item');
+            const vehicles = [];
+            
+            vehicleItems.forEach((vehicleItem, index) => {
+                // Check if it's an existing vehicle or new one
+                if (vehicleItem.dataset.id) {
+                    // Existing vehicle
+                    vehicles.push({
+                        id: parseInt(vehicleItem.dataset.id),
+                        plate: vehicleItem.querySelector('.vehicle-item-details').children[0].textContent.replace('Placa:', '').trim(),
+                        make: vehicleItem.querySelector('.vehicle-item-details').children[1].textContent.replace('Marca:', '').trim(),
+                        model: vehicleItem.querySelector('.vehicle-item-details').children[2].textContent.replace('Modelo:', '').trim(),
+                        type: vehicleItem.querySelector('.vehicle-item-details').children[3].textContent.replace('Tipo:', '').trim(),
+                        color: vehicleItem.querySelector('.vehicle-item-details').children[4].textContent.replace('Cor:', '').trim()
+                    });
+                } else {
+                    // New vehicle
+                    const plate = vehicleItem.querySelector('.vehicle-plate').value;
+                    const make = vehicleItem.querySelector('.vehicle-make').value;
+                    const model = vehicleItem.querySelector('.vehicle-model').value;
+                    const type = vehicleItem.querySelector('.vehicle-type').value;
+                    const color = vehicleItem.querySelector('.vehicle-color').value;
+                    
+                    // Validate vehicle fields
+                    if (plate && make && model && type && color) {
+                        vehicles.push({
+                            id: id ? parseInt(id) * 100 + index : (clientsData.length + 1) * 100 + index,
+                            plate,
+                            make,
+                            model,
+                            type,
+                            color
+                        });
+                    } else {
+                        utils.showAlert('Erro', 'Todos os campos do veículo são obrigatórios!');
+                        isValid = false;
+                        return;
+                    }
+                }
+            });
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Create client object
+            const client = {
+                id: id ? parseInt(id) : clientsData.length + 1,
+                name,
+                email,
+                phone,
+                vehicles,
+                appointments: id ? clientsData.find(c => c.id === parseInt(id)).appointments : 0
+            };
+            
+            // Add or update client
+            if (id) {
+                // Update existing client
+                const index = clientsData.findIndex(c => c.id === parseInt(id));
+                clientsData[index] = client;
+                
+                // Update filtered list
+                const filteredIndex = filteredClients.findIndex(c => c.id === parseInt(id));
+                if (filteredIndex !== -1) {
+                    filteredClients[filteredIndex] = client;
+                }
+            } else {
+                // Add new client
+                clientsData.push(client);
+                filteredClients = [...clientsData];
+            }
+            
+            // Close modal
+            modalUtils.closeModal('clientModal');
+            
+            // Render clients
+            renderClientsTable();
+            
+            // Show success message
+            utils.showAlert('Sucesso', id ? 'Cliente atualizado com sucesso!' : 'Cliente criado com sucesso!');
+        }
+
+        // Initialize settings
+        function initSettings() {
+            setupSettingsEvents();
+        }
+
+        // Setup settings events
+        function setupSettingsEvents() {
+            // Company settings form
+            document.getElementById('companySettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                utils.showAlert('Sucesso', 'Configurações da empresa atualizadas com sucesso!');
+            });
+            
+            // Business hours form
+            document.getElementById('businessHoursForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                utils.showAlert('Sucesso', 'Horários de funcionamento atualizados com sucesso!');
+            });
+            
+            // Notifications settings form
+            document.getElementById('notificationsSettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                utils.showAlert('Sucesso', 'Configurações de notificações atualizadas com sucesso!');
+            });
+            
+            // Security settings form
+            document.getElementById('securitySettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                utils.showAlert('Sucesso', 'Senha atualizada com sucesso!');
+            });
+        }
+
+        // Navigation functionality
+        function initNavigation() {
+            // Sidebar toggle
+            document.getElementById('sidebarToggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+            });
+            
+            // Navigation links
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Update active item
+                    document.querySelectorAll('.nav-item').forEach(navItem => {
+                        navItem.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show corresponding page
+                    const pageName = this.dataset.page;
+                    document.querySelectorAll('.content-page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    document.getElementById(`${pageName}Page`).classList.add('active');
+                    
+                    // Update page title
+                    document.getElementById('pageTitle').textContent = this.querySelector('.nav-text').textContent;
+                    
+                    // On mobile, collapse sidebar after navigation
+                    if (window.innerWidth < 768) {
+                        document.getElementById('sidebar').classList.add('collapsed');
+                    }
+                });
+            });
+            
+            // Handle hash-based navigation
+            function handleHashChange() {
+                const hash = window.location.hash.substring(1);
+                if (hash) {
+                    const navItem = document.querySelector(`.nav-item[data-page="${hash}"]`);
+                    if (navItem) {
+                        navItem.click();
+                    }
+                }
+            }
+            
+            window.addEventListener('hashchange', handleHashChange);
+            
+            // Handle initial hash
+            handleHashChange();
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize modals
+            modalUtils.initModals();
+            
+            // Initialize navigation
+            initNavigation();
+            
+            // Initialize each module
+            initDashboard();
+            initAppointments();
+            initServices();
+            initClients();
+            initSettings();
+        });
+
+        // For demo purposes, adding charts with simple canvas
+        function drawSimpleBarChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Calculate max value and bar width
+            const maxValue = Math.max(...data.map(item => item.count));
+            const barWidth = width / (data.length * 2);
+            const spacing = barWidth;
+            
+            // Draw bars
+            data.forEach((item, index) => {
+                const barHeight = (item.count / maxValue) * (height - 40);
+                const x = index * (barWidth + spacing) + spacing;
+                const y = height - barHeight - 20;
+                
+                // Draw bar
+                ctx.fillStyle = '#0d404f';
+                ctx.fillRect(x, y, barWidth, barHeight);
+                
+                // Draw label
+                ctx.fillStyle = '#343a40';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(item.name, x + barWidth / 2, height - 5);
+                
+                // Draw value
+                ctx.fillStyle = '#495057';
+                ctx.fillText(item.count.toString(), x + barWidth / 2, y - 5);
+            });
+        }
+    </script>
+</body>
+</html>

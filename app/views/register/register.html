@@ -18,6 +18,132 @@
         font-family: "Open Sans", sans-serif;
     }
 
+    @media (max-width: 767px) {
+    
+    .container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .second-content, .first-content {
+        flex-direction: column;
+        height: 400px;
+        width: 300px;
+        margin: 20px transparent;
+    }
+    
+    .First-column, 
+    .Second-column {
+        width: 100% !important;
+        margin: auto;
+    }
+    
+    .First-column {
+        background-color: #0d404f;
+        order: 1;
+        height: 100%;
+    }
+
+    .First-column h2 {
+        margin-top: 10px;
+    }
+    
+    .Second-column {
+        order: 2;
+    }
+
+    .Second-column a {
+        margin-bottom: 30px;
+    }
+
+    
+    
+    /* Desativa animações no mobile */
+    .content::before,
+    .sign-in-js .content::before,
+    .sign-up-js .content::before {
+        display: none;
+    }
+    
+    /* Ajuste para os formulários alternados */
+    .sign-in-js .first-content,
+    .sign-up-js .second-content {
+        display: none;
+    }
+    
+    .sign-in-js .second-content,
+    .sign-up-js .first-content {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+}
+
+    .spinner-overlay {
+            display: none; /* Inicialmente escondido */
+            position: fixed; /* Fica fixo na tela */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Fundo mais escuro e mais opaco */
+            z-index: 1000; /* Garante que fique acima de outros elementos */
+            justify-content: center;
+            align-items: center;
+            opacity: 1; /* Garante que seja visível inicialmente */
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .spinner-overlay.fade-out {
+            opacity: 0;
+        }
+
+        .spinner {
+            position: relative;
+            width: 20px;
+            height: 20px;
+        }
+
+        .spinner div {
+            width: 100%;
+            height: 100%;
+            background-color: #00d9ff;
+            border-radius: 50%;
+            animation: spinner 0.75s infinite backwards;
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg) translateY(-200%);
+            }
+
+            60%,
+            100% {
+                transform: rotate(360deg) translateY(-200%);
+            }
+        }
+
+        .spinner div:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .spinner div:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .spinner div:nth-child(3) {
+            animation-delay: 0.25s;
+        }
+
+        .spinner div:nth-child(4) {
+            animation-delay: 0.35s;
+        }
+
+        .spinner div:nth-child(5) {
+            animation-delay: 0.45s;
+        }
+
+
     .container {
         display: flex;
         justify-content: center;
@@ -174,6 +300,34 @@
         position: absolute;
     }
 
+    .second-content .adm {
+    display: inline-block;
+    margin-top: 50px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-decoration: none;
+    color: #0d404f;
+    position: relative;
+    transition: color 0.3s ease; /* se quiser animar a cor também */
+    }
+
+    .second-content .adm::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px; /* um pouco abaixo do texto */
+    width: 0;
+    height: 2px;
+    background-color: #0d404f;
+    transition: width 0.3s ease;
+    }
+
+    .second-content .adm:hover::after {
+    width: 100%;
+}
+
+
     .second-content .First-column {
         order: 2;
         z-index: -1;
@@ -237,7 +391,7 @@
         z-index: -1;
         animation: desloc-right 2s;
     }
- 
+    
     /*Animação CSS para o conteudo */
 
     @keyframes desloc-left {
@@ -321,6 +475,15 @@
    
 </head>
 <body>
+    <div class="spinner-overlay">
+        <div class="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
     <div class="container">
         <div class="content first-content"> <!--Fist content-->
             <div class="First-column"> 
@@ -331,23 +494,22 @@
             <div class="Second-column">
                 <H2 class="title title-second">Crie Sua conta</H2>
                 <p class="description description-second">Insira os seus dados abaixo</p>
-<form id="registerForm" class="form">
-    <label class="label-input" for="nome">
-        <i class="fa-solid fa-user icon-modify"></i>
-        <input type="text" id="nome" placeholder="Nome" required>
-    </label>
-    <label class="label-input" for="email">
-        <i class="fa-solid fa-envelope icon-modify"></i>
-        <input type="email" id="email" placeholder="Digite seu email" required>
-    </label>
-    <label class="label-input" for="senha">
-        <i class="fa-solid fa-lock icon-modify"></i>
-        <input type="password" id="senha" placeholder="Digite sua senha" required>
-    </label>
-    <button type="submit" class="btn btn-second">Registrar</button>
-</form>
+                <form id="registerForm" class="form">
+                    <label class="label-input" for="nome">
+                        <i class="fa-solid fa-user icon-modify"></i>
+                            <input type="text" id="nome" placeholder="Nome" required>
+                    </label>
+                    <label class="label-input" for="email">
+                        <i class="fa-solid fa-envelope icon-modify"></i>
+                            <input type="email" id="email" placeholder="Digite seu email" required>
+                    </label>
+                    <label class="label-input" for="senha">
+                        <i class="fa-solid fa-lock icon-modify"></i>
+                            <input type="password" id="senha" placeholder="Digite sua senha" required>
+                    </label>
+                    <button type="submit" class="btn btn-second">Registrar</button>
+                </form>
             </div>
-
         </div>
         <div class="content second-content"> <!--Second content-->
 
@@ -370,7 +532,7 @@
                     </label>
                     <button type="submit" class="btn btn-second">Entrar</button>
                 </form>
-
+                    <a href="/app/views/admlogin/admlogin.html" class="adm">Entrar como administrador</a>
             </div>
         </div>
     </div>
@@ -378,68 +540,109 @@
         var btnsignin = document.querySelector("#signin");
         var btnsignup = document.querySelector("#signup");
         var body = document.querySelector("body");
-    
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const spinnerOverlay = document.querySelector('.spinner-overlay');
+        let loaderTimeout;
+
+        function showLoader() {
+            spinnerOverlay.classList.remove('fade-out');
+            spinnerOverlay.style.display = 'flex';
+            loaderTimeout = setTimeout(hideLoader, 5000);
+        }
+
+        function hideLoader() {
+            clearTimeout(loaderTimeout);
+            spinnerOverlay.classList.add('fade-out');
+            setTimeout(() => {
+                spinnerOverlay.style.display = 'none';
+            }, 300);
+        }
+
+        // Exibe o loader quando a página é carregada
+        window.onload = function() {
+            showLoader();
+            setTimeout(hideLoaderOnLoad, 1500); // Esconde após 1.5 segundos
+        };
+
+        function hideLoaderOnLoad() {
+            spinnerOverlay.classList.add('fade-out');
+            setTimeout(() => {
+                spinnerOverlay.style.display = 'none';
+            }, 300);
+        }
+
         btnsignin.addEventListener("click", function () {
             body.className = "sign-in-js";
         });
-    
+
         btnsignup.addEventListener("click", function () {
             body.className = "sign-up-js"
         });
-   
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
-            e.preventDefault();
 
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginSenha').value;
+        if (loginForm) {
+            loginForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                showLoader(); // Exibe o loader ao tentar logar
 
-            fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'ok') {
-                    localStorage.setItem('auth_token', data.token);
-                    window.location.href = '/service';
-                } else {
-                    alert('Erro no login: ' + (data.errors || ['Credenciais inválidas']).join(', '));
-                }
-            })
-            .catch(() => alert('Erro na requisição'));
-        });
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginSenha').value;
 
-    </script>
-
-    <script>
-document.getElementById('registerForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const nome = document.getElementById('nome').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('senha').value;
-
-    fetch('/api/clients', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            client: { nome, email, password }
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'ok') {
-            localStorage.setItem('auth_token', data.token);
-            window.location.href = "/service";
-        } else {
-            alert('Erro: ' + data.errors.join(', '));
+                fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    clearTimeout(loaderTimeout);
+                    hideLoader();
+                    if (data.status === 'ok') {
+                        localStorage.setItem('auth_token', data.token);
+                        window.location.href = '/service';
+                    } else {
+                        alert('Erro no login: ' + (data.errors || ['Credenciais inválidas']).join(', '));
+                    }
+                })
+                .catch(() => {
+                    clearTimeout(loaderTimeout);
+                    hideLoader();
+                    alert('Erro na requisição');
+                });
+            });
         }
-    });
-    
-});
+
+        if (registerForm) {
+            registerForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                showLoader(); // Exibe o loader ao tentar registrar
+
+                const nome = document.getElementById('nome').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('senha').value;
+
+                fetch('/api/clients', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        client: { nome, email, password }
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    clearTimeout(loaderTimeout);
+                    hideLoader();
+                    if (data.status === 'ok') {
+                        localStorage.setItem('auth_token', data.token);
+                        window.location.href = "/service";
+                    } else {
+                        alert('Erro: ' + data.errors.join(', '));
+                    }
+                });
+            });
+        }
 </script>
 </body>
 </html>
